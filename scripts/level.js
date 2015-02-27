@@ -72,6 +72,8 @@ function level_level() {
 
 function update_level() {
 
+	//enterTry = false;
+
 	if(pause == false) {
 		levelSnelheid = 0;
 		if(keyPressList[32]) {
