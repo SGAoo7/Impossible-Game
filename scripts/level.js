@@ -25,7 +25,7 @@ var showTime = new Kinetic.Text({x: 10,y: 10,text:'', fontSize: 20,fontFamily: '
 
 // all the variables.
 
-function start(){
+function start_level(){
 	// alle plaatjes in het level plaatsen, beginposities.
 	
 	gameObjectsLayer.removeChildren();
@@ -61,8 +61,8 @@ function start(){
 
 
 
-function level() {
-	gameLoop=setInterval(update,20);  
+function level_level() {
+	gameLoop=setInterval(update_level,20);  
 	//update();
 	//20 is de 'wachttijd in milliseconden, de functie 'update' wordt om de 0.02 s aangeroepen.
 	// Dit voorbeeld is dus 50 fps (mits de hardware het aankan)
@@ -70,7 +70,7 @@ function level() {
 }
 
 
-function update() {
+function update_level() {
 
 	if(pause == false) {
 		levelSnelheid = 0;
@@ -88,11 +88,14 @@ function update() {
 	} 
 	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 	//hero
-	hero.setX(hero.getX() -1);
-	 if(hero.getX() <= 0) {
-	 	switchGameState(GAME_STATE_INIT_LEVEL_END);
-	 	heroLife = 0;
-	 }
+	hero.setX(hero.getX() -2);
+	
+	if(currentGameState==GAME_STATE_LEVEL) {
+		 if(hero.getX() <= 0) {
+		 	switchGameState(GAME_STATE_INIT_LEVEL_END);
+		 	heroLife = 0;
+		 }
+	}
 	//spikes
 
 	spikes.setX(spikes.getX()-levelSnelheid);			//spikes sidescroll

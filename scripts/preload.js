@@ -33,6 +33,20 @@ function init() {
 
     //end screen preloads
     end_backgroundImage = preload('assets/end_background.jpg');
+    end_background2Image = preload('assets/end_background2.jpg');
+    Game_overImage = preload('assets/GameOver.png');
+    
+    end_menuImage = preload('assets/end_menu.png');
+    end_menu2Image = preload('assets/end_menu2.png');
+    
+    try_againImage = preload('assets/try_again.png');
+    try_again2Image = preload('assets/try_again2.png');
+    
+    quit_gameImage = preload('assets/quit_game.png');
+    quit_game2Image = preload('assets/quit_game2.png');
+   
+    shopImage = preload('assets/shop.png');
+    shop2Image = preload('assets/shop2.png');
 
     //tutorial level
     youTutorialImage = preload('assets/you_tutorial.png');
@@ -90,7 +104,25 @@ function makeKineticImages() {
     menu_space = new Kinetic.Image({X:700, Y:430, image: menu_spaceImage});
     menu_quit = new Kinetic.Image({X:5, Y:350, image: menu_quitImage});
     menu_quit_2 = new Kinetic.Image({X:5, Y:350, image: menu_quit_2Image});
-    end_background = new Kinetic.Image({X:5, Y:350, image: end_backgroundImage});
+    
+    end_background = new Kinetic.Image({X:0, Y:0, image: end_backgroundImage, opacity:0.3});
+    end_background2 = new Kinetic.Image({X:0, Y:0, image: end_background2Image});
+   
+    try_again = new Kinetic.Image({X:10, Y:200, image: try_againImage});
+    try_again2 = new Kinetic.Image({X:10, Y:200, image: try_again2Image});
+   
+    end_menu = new Kinetic.Image({X:10, Y:260, image: end_menuImage});
+    end_menu2 = new Kinetic.Image({X:10, Y:260, image: end_menu2Image});
+    
+    shop = new Kinetic.Image({X:10, Y:320, image: shopImage});
+    shop2 = new Kinetic.Image({X:10, Y:320, image: shop2Image});
+    
+    quit_game = new Kinetic.Image({X:10, Y:380, image: quit_gameImage});
+    quit_game2 = new Kinetic.Image({X:10, Y:380, image: quit_game2Image});
+    
+    GameOver = new Kinetic.Image({X:170, Y:50, image: Game_overImage});
+   
+
     menu_arrow = new Kinetic.Image({X:612, Y:460, image: menu_arrowImage});
     you_tutorial = new Kinetic.Image({X:160, Y:400, image: youTutorialImage});
     zin_tutorial = new Kinetic.Image({X:10, Y:10, image: zinTutorialImage});

@@ -35,6 +35,7 @@ function update_menu(){
 	if(currentGameState==GAME_STATE_MENU) {
 
 	background_menu.scale({x:0.5, y:0.5});
+	
 	if(keyPressList[40]) {									//menu quit button
 		gameObjectsLayer.add(menu_quit_2);
 		menu_start_2.remove();
@@ -47,8 +48,7 @@ function update_menu(){
 		startTrue = true;
 		quitTrue = false;
 	}
-	if(keyPressList[32] && quitTrue == true) {
-		console.log('hello');
+	if(keyPressList[13] && quitTrue == true) {
 		window.close();
 	}
 	if(keyPressList[13] && startTrue == true && currentGameState == GAME_STATE_MENU) {

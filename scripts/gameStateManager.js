@@ -1,9 +1,9 @@
 const GAME_STATE_IDLE = "idle";
 const GAME_STATE_INIT = "init";
-const GAME_STATE_INIT_LEVEL = "start"; 
+const GAME_STATE_INIT_LEVEL = "start_level"; 
 const GAME_STATE_INIT_LEVEL_MENU = "start_menu"; 
 const GAME_STATE_INIT_LEVEL_END = "start_end"; 
-const GAME_STATE_LEVEL = "level";
+const GAME_STATE_LEVEL = "level_level";
 const GAME_STATE_MENU = "level_menu";
 const GAME_STATE_END = "level_end";
 
@@ -23,11 +23,11 @@ function switchGameState(newState) {
             break;
  
         case GAME_STATE_INIT_LEVEL:
-            currentGameStateFunction = start;
+            currentGameStateFunction = start_level;
             break;
         
         case GAME_STATE_LEVEL:
-            currentGameStateFunction = level;
+            currentGameStateFunction = level_level;
             break;
 
         case GAME_STATE_INIT_LEVEL_MENU:
