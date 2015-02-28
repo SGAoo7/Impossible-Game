@@ -1,12 +1,18 @@
 var showEndTime = new Kinetic.Text({x: 320,y: 160,text:'', fontSize: 25,fontFamily: 'Calibri', fill: 'black', });
+
 var enterTry = false;
 var enterMenu = false;
+var enterShop = false;
+var enterQuit = false;
+
 var menuTrigger = false;
 var TryTrigger = true;
 var shopTrigger = false;
 var quitTrigger = false;
+
 var menuBackTrigger = false;
 var shopBackTrigger = false;
+var quitBackTrigger = true;
 // all the variables.
 
 function start_end(){
@@ -57,9 +63,7 @@ function update_end() {
 	quit_game.scale({x: 0.6, y: 0.6});
 	quit_game2.scale({x: 0.6, y: 0.6});
 
-	console.log(shopBackTrigger);
-
-	if(keyPressList[38] && TryTrigger == true) {				//try again button
+	if(keyPressList[38] && TryTrigger == true) {				
 		try_again2.remove();
 		gameObjectsLayer.add(try_again);
 		end_menu.remove();
@@ -68,24 +72,33 @@ function update_end() {
 		gameObjectsLayer.add(shop2);
 		quit_game.remove();
 		gameObjectsLayer.add(quit_game2);
+		quitBackTrigger = false;
 		enterTry = true
 		enterMenu = false;
 		menuTrigger = true;
+		menuBackTrigger = false;
 		TryTrigger = false;
-		shopTrigger = true;
+		shopTrigger = false;
+		shopBackTrigger = false;
+		quitTrigger = false;
 		keyPressList[38] = false;
 	}
-	if(keyPressList[40] && menuTrigger == true){				//menu button 
+	if(keyPressList[40] && menuTrigger == true){				
 		end_menu2.remove();	
 		gameObjectsLayer.add(end_menu);
 		try_again.remove();
 		gameObjectsLayer.add(try_again2);
+		shop.remove();
+		gameObjectsLayer.add(shop2);
+		quit_game.remove();
+		gameObjectsLayer.add(quit_game2);
 		enterTry = false;
 		enterMenu = true;
+		enterShop = false;
 		menuTrigger = false;
 		TryTrigger = true;
+		shopBackTrigger = false;
 		shopTrigger = true;
-		menuBackTrigger = true;
 		keyPressList[40] = false;
 	}
 	if(keyPressList[38] && menuBackTrigger == true) {
@@ -98,6 +111,9 @@ function update_end() {
 		quit_game.remove();
 		gameObjectsLayer.add(quit_game2);
 		TryTrigger = true;
+		menuTrigger = false;
+		shopBackTrigger = false;
+		shopTrigger = true;
 		menuBackTrigger = false;
 		keyPressList[38] = false;
 	}
@@ -107,9 +123,17 @@ function update_end() {
 		shop2.remove();
 		gameObjectsLayer.add(shop);
 		try_again.remove();
-		quitTrigger = true;
+		gameObjectsLayer.add(try_again2);
+		quit_game.remove();
+		gameObjectsLayer.add(quit_game2);
+		quitTrigger = false;
+		menuTrigger = false;
+		enterShop = true;
+		menuBackTrigger = true;
+		quitBackTrigger = true;
 		shopTrigger = false;
 		TryTrigger = false;
+		shopBackTrigger = false;
 		keyPressList[40] = false;
 	}
 	if(keyPressList[38] && shopBackTrigger == true) {
@@ -117,24 +141,70 @@ function update_end() {
 		gameObjectsLayer.add(quit_game2);
 		shop2.remove();
 		gameObjectsLayer.add(shop);
+		try_again.remove();
+		gameObjectsLayer.add(try_again2);
+		quit_game.remove();
+		gameObjectsLayer.add(quit_game2);
 		shopBackTrigger = false;
+		menuBackTrigger = true;
+		quitBackTrigger = true;
+		enterShop = true;
+		menuTrigger = false;
+		TryTrigger = false;
+		quitTrigger = true;
 		keyPressList[38] = false;
 	}
-	if(keyPressList[40] && quitTrigger == true) {
+	if(keyPressList[40] && quitBackTrigger == true) {
 		quit_game2.remove();
 		gameObjectsLayer.add(quit_game);
 		shop.remove();
 		gameObjectsLayer.add(shop2);
-		shopBackTrigger = true
-		shopTrigger = true;
+		end_menu.remove();
+		gameObjectsLayer.add(end_menu2);
+		try_again.remove();
+		gameObjectsLayer.add(try_again2);
+		shopBackTrigger = true;
+		quitBackTrigger = false;
+		menuBackTrigger = false;
+		enterShop = false;
+		TryTrigger = false;
+		shopTrigger = false;
+		menuTrigger = false;
 		quitTrigger = false;
+		enterQuit = true;
 		keyPressList[40] = false;
+	}
+	if(keyPressList[38] && quitTrigger == true) {
+		quit_game.remove();
+		gameObjectsLayer.add(quit_game2);
+		shop.remove();
+		gameObjectsLayer.add(shop2);
+		try_again.remove();
+		gameObjectsLayer.add(try_again2);
+		quit_game2.remove();
+		gameObjectsLayer.add(quit_game);
+		shopBackTrigger = false;
+		menuBackTrigger = false;
+		quitBackTrigger = false;
+		enterQuit = true;
+		menuTrigger = false;
+		TryTrigger = false;
+		quitTrigger = false;
+		quitBackTrigger = false;
+		keyPressList[38] = false;
 	}
 	if(keyPressList[13] && enterTry == true && currentGameState == GAME_STATE_END) {
 		switchGameState(GAME_STATE_INIT_LEVEL);
 	}
 	if(keyPressList[13] && enterMenu == true && currentGameState == GAME_STATE_END) {
 		switchGameState(GAME_STATE_MENU);
+	}
+	/*if(keyPressList[13] && enterShop == true && currentGameState == GAME_STATE_END) {
+		
+	}*/
+	if(keyPressList[13] && enterQuit == true && currentGameState == GAME_STATE_END) {
+		window.close();
+		enterQuit = false;
 	}
 	showEndTime.setText('You survived '+ parseInt(time) + ' seconds');
 }
