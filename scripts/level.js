@@ -19,6 +19,7 @@ var heroInAir = false;
 var pause = false;
 
 var time = 0;
+var coinTime = 0;
 var showTime = new Kinetic.Text({x: 10,y: 10,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 
 //var level_backgroundSound = new Audio('assets/level_background.mp3');
@@ -72,8 +73,6 @@ function level_level() {
 
 function update_level() {
 
-	
-
 	if(pause == false) {
 		levelSnelheid = 0;
 		if(keyPressList[32]) {
@@ -82,12 +81,17 @@ function update_level() {
 			you_tutorial.remove();
 		}
 	}
+	hero.setX(hero.getX() -1);
 	if(pause == true && heroLife == 1) {
 		levelSnelheid = 2;
 		time += 0.02;
+		coinTime += 0.02;
 		gameObjectsLayer.add(showTime);
-		
-	} 
+	}
+	if(coinTime >= 1) {
+		coinTime = 0;
+		coins += 1;
+	}
 	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 	//hero
 	//hero.setX(hero.getX() -2);
@@ -148,7 +152,7 @@ function update_level() {
 	//collisions
 
 	/*if(collision(hero,spikes)){							//collison between hero and spikes
-		heroLife -=1;
+	
 	}
 	if (collision(block1, hero)) {						//collison between block 1 and hero
 		hero.setX(hero.getX()-2);
