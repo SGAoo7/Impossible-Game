@@ -51,7 +51,6 @@ function level_end() {
 function update_end() {
 	
 	if(currentGameState==GAME_STATE_END) {
-
 	end_background.scale({x: 0.5, y: 0.45});
 	GameOver.scale({x: 1.5, y: 1.5});
 	end_menu.scale({x: 0.6, y: 0.6});
@@ -197,10 +196,10 @@ function update_end() {
 		switchGameState(GAME_STATE_INIT_LEVEL);
 	}
 	if(keyPressList[13] && enterMenu == true && currentGameState == GAME_STATE_END) {
-		switchGameState(GAME_STATE_MENU);
+		switchGameState(GAME_STATE_INIT_LEVEL_MENU);
 	}
 	/*if(keyPressList[13] && enterShop == true && currentGameState == GAME_STATE_END) {
-		
+		//shop link
 	}*/
 	if(keyPressList[13] && enterQuit == true && currentGameState == GAME_STATE_END) {
 		window.close();

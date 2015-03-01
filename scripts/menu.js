@@ -50,9 +50,11 @@ function update_menu(){
 	}
 	if(keyPressList[13] && quitTrue == true) {
 		window.close();
+		quitTrue = false;
 	}
 	if(keyPressList[13] && startTrue == true && currentGameState == GAME_STATE_MENU) {
 		switchGameState(GAME_STATE_INIT_LEVEL);
+		startTrue = false;
 	}
 	gameObjectsLayer.draw();
 	}
