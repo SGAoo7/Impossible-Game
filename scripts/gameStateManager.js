@@ -3,6 +3,7 @@ const GAME_STATE_INIT = "init";
 const GAME_STATE_INIT_LEVEL = "start_level"; 
 const GAME_STATE_INIT_LEVEL_MENU = "start_menu"; 
 const GAME_STATE_INIT_LEVEL_END = "start_end"; 
+const GAME_STATE_INIT_LEVEL_SHOP = "start_shop"; 
 const GAME_STATE_LEVEL = "level_level";
 const GAME_STATE_MENU = "level_menu";
 const GAME_STATE_END = "level_end";
@@ -45,6 +46,11 @@ function switchGameState(newState) {
         case GAME_STATE_END:
             currentGameStateFunction = level_end;
             break;
+
+        case GAME_STATE_INIT_LEVEL_SHOP:
+            currentGameStateFunction = start_shop;
+            break;
+
     }
 
 	currentGameStateFunction();

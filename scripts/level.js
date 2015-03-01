@@ -72,7 +72,7 @@ function level_level() {
 
 function update_level() {
 
-	//enterTry = false;
+	
 
 	if(pause == false) {
 		levelSnelheid = 0;
@@ -90,7 +90,7 @@ function update_level() {
 	} 
 	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 	//hero
-	hero.setX(hero.getX() -2);
+	//hero.setX(hero.getX() -2);
 	
 	if(currentGameState==GAME_STATE_LEVEL) {
 		 if(hero.getX() <= 0) {
@@ -195,13 +195,10 @@ function update_level() {
 
 	gameObjectsLayer.draw();
 }
-
 	function blockCollision(x1, y1, x2, y2){
 		if (hero.getX() >= x1 && hero.getY() <= y1 && hero.getX() <= x2) {
 			collisionHight = y1 -30;
 		}
-
-
 		if (hero.getX() >= x1 && hero.getY() <= y2 && hero.getY() >= y1 && hero.getX() <= x2) {
 			hero.setY(y2 + 1);
 			upTimer = 0;

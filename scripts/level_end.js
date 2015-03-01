@@ -13,6 +13,8 @@ var quitTrigger = false;
 var menuBackTrigger = false;
 var shopBackTrigger = false;
 var quitBackTrigger = true;
+
+var theShop = false;
 // all the variables.
 
 function start_end(){
@@ -110,6 +112,8 @@ function update_end() {
 		quit_game.remove();
 		gameObjectsLayer.add(quit_game2);
 		TryTrigger = true;
+		enterMenu = true;
+		enterShop = false;
 		menuTrigger = false;
 		shopBackTrigger = false;
 		shopTrigger = true;
@@ -128,6 +132,7 @@ function update_end() {
 		quitTrigger = false;
 		menuTrigger = false;
 		enterShop = true;
+		enterMenu = false;
 		menuBackTrigger = true;
 		quitBackTrigger = true;
 		shopTrigger = false;
@@ -147,12 +152,13 @@ function update_end() {
 		shopBackTrigger = false;
 		menuBackTrigger = true;
 		quitBackTrigger = true;
+		enterQuit = false;
 		enterShop = true;
 		menuTrigger = false;
 		TryTrigger = false;
 		quitTrigger = true;
 		keyPressList[38] = false;
-	}
+	} 
 	if(keyPressList[40] && quitBackTrigger == true) {
 		quit_game2.remove();
 		gameObjectsLayer.add(quit_game);
@@ -198,9 +204,9 @@ function update_end() {
 	if(keyPressList[13] && enterMenu == true && currentGameState == GAME_STATE_END) {
 		switchGameState(GAME_STATE_INIT_LEVEL_MENU);
 	}
-	/*if(keyPressList[13] && enterShop == true && currentGameState == GAME_STATE_END) {
-		//shop link
-	}*/
+	if(keyPressList[13] && enterShop == true && currentGameState == GAME_STATE_END) {
+		switchGameState(GAME_STATE_INIT_LEVEL_SHOP);
+	}
 	if(keyPressList[13] && enterQuit == true && currentGameState == GAME_STATE_END) {
 		window.close();
 		enterQuit = false;
