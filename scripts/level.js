@@ -2,7 +2,7 @@
 var heroLife = 1;
 
 //level variables
-var levelSnelheid = 2;
+var levelSnelheid = 3;
 
 //gravity and jump variables
 var canJump = true;
@@ -78,7 +78,13 @@ function level_level() {
 
 function update_level() {
 
-	console.log(levelSnelheid);
+	hero.setX(hero.getX() -2);
+	if(currentGameState == GAME_STATE_LEVEL) {
+		if(hero.getX() <= 0) {
+			heroLife = 0;
+			switchGameState(GAME_STATE_INIT_LEVEL_END);
+		}
+	} 
 
 	if(pause == false) {
 		levelSnelheid = 0;
@@ -90,7 +96,7 @@ function update_level() {
 	}
 	//hero.setX(hero.getX() -1);
 	if(pause == true && heroLife == 1) {
-		levelSnelheid = 5;
+		levelSnelheid = 3;
 		time += 0.02;
 		coinTime += 0.02;
 		gameObjectsLayer.add(showTime);
@@ -157,26 +163,20 @@ function update_level() {
 	if(block1.getX() <= -200) {
 		block1.setX(Math.floor((Math.random() * 1000) + 950));
 		block1.setY(445);
-			if(block1.getX() >= block2.getX() +40) {
-				block1.setX(Math.floor((Math.random() * 1000) + 950));
-				block2.setX(Math.floor((Math.random() * 1000) + 950));
+			if(block2.getX() >= block1.getX() +40) {
+				block2.setX(block1.getX()+Math.floor((Math.random() * 100) + 50));
 			}
 	}
 	if(block2.getX() <= -200) {
 		block2.setX(Math.floor((Math.random() * 1400) + 1100));
 		block2.setY(445);
-			if(block1.getX() >= block3.getX() +40) {
-				block1.setX(Math.floor((Math.random() * 1000) + 950));
-				block3.setX(Math.floor((Math.random() * 1000) + 950));
+			if(block1.getX() >= block2.getX() +40) {
+				block1.setX(block2.getX()+Math.floor((Math.random() * 100) + 50));
 			}
 	}
 	if(block3.getX() <= -200) {
 		block3.setX(Math.floor((Math.random() * 1600) + 1400));
-		block3.setY(Math.floor((Math.random() * 100) + 0));
-			if(block2.getX() >= block3.getX() +40) {
-				block2.setX(Math.floor((Math.random() * 1000) + 950));
-				block3.setX(Math.floor((Math.random() * 1000) + 950));
-			}
+		block3.setY(Math.floor((Math.random() * 350) + 300));
 	}
 
 	//backgrounds
@@ -197,14 +197,14 @@ function update_level() {
 	
 	//}
 	if (collision(block1, hero)) {						//collison between block 1 and hero
-		hero.setX(hero.getX()-2);
+		hero.setX(hero.getX()-levelSnelheid);
 	}
 	if (collision(block2, hero)) {						//collison between block 2 and hero
-		hero.setX(hero.getX()-2);
+		hero.setX(hero.getX()-levelSnelheid);
 	}
 
 	//health
-
+	console.log(JTimer);
 	
 	//jump and gravity sysmtem
 
@@ -224,12 +224,10 @@ function update_level() {
 	}
 	else if(hero.getY() < collisionBorder) {
 		JTimer += 1;
-		heroInAir = true;
 		hero.setY(hero.getY() + gravity);
 	}
 	else {
 		JTimer = 0;
-		heroInAir = false;
 	}
 	
 	gameObjectsLayer.draw();
