@@ -18,6 +18,10 @@ var jumpBackTrigger = false;
 var bulletBackTrigger = true;
 var coinBackTrigger = false;
 
+var jumpBuy = false;
+var jumpExtraBuy = false;
+var jumpCosts = 10
+
 var coins = 0;
 var showCoins = new Kinetic.Text({x: 150,y: 120,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
 var bullet = 0;
@@ -92,6 +96,7 @@ function update_shop() {
 		bulletTrigger = false;
 		keyPressList[39] = false
 		jumpTrigger = true
+		jumpExtraBuy = false;
 	}	
 	if(keyPressList[39] && jumpTrigger == true) {
 		bulletBackTrigger = true;
@@ -101,6 +106,7 @@ function update_shop() {
 		keyPressList[39] = false;
 		jumpTrigger = false;
 		coinTrigger = true;
+		jumpExtraBuy = true;
 		shop_bullets.opacity(0.6);
 	}
 	if(keyPressList[39] && coinTrigger == true) {
@@ -112,6 +118,7 @@ function update_shop() {
 		jumpBackTrigger = true;
 		keyPressList[39] = false;
 		jumpBackTrigger = true;
+		jumpBuy = false;
 	}
 	if(keyPressList[37] && jumpBackTrigger == true) {
 		jumpBackTrigger = false;
@@ -122,6 +129,7 @@ function update_shop() {
 		shop_coin.opacity(0.6);
 		cost_coin.opacity(0.6);
 		cost_jump.opacity(1);
+		jumpExtraBuy = true;
 	}
 	if(keyPressList[37] && bulletBackTrigger == true) {
 		bulletBackSTrigger = false;
@@ -132,6 +140,14 @@ function update_shop() {
 		cost_jump.opacity(0.6);
 		shop_bullets.opacity(1);
 		cost_bullets.opacity(1);
+		jumpExtraBuy = false;
+	}
+	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true) {
+		coins - 10;
+		jump = 1;
+		// if(coins <= 0) {
+		// 	coins = 0;
+		// }
 	}
 }
 	

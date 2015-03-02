@@ -13,6 +13,7 @@ function init() {
     heroImage = preload('assets/hero.png');
     spikesImage = preload('assets/spikes.png');
     blockImage = preload('assets/block.png');
+    onzichtbaarBlokImage = preload('assets/onzichtbaar_blok.png');
     
     //menu preloads
     background_menuImage = preload('assets/background_menu.jpg');
@@ -122,6 +123,9 @@ function makeKineticImages() {
     menu_space = new Kinetic.Image({X:705, Y:430, image: menu_spaceImage});
     menu_quit = new Kinetic.Image({X:5, Y:350, image: menu_quitImage});
     menu_quit_2 = new Kinetic.Image({X:5, Y:350, image: menu_quit_2Image});
+    onzichtbaar_blok1 = new Kinetic.Image({X:-10, Y:-10, image: onzichtbaarBlokImage});
+    onzichtbaar_blok2 = new Kinetic.Image({X:-10, Y:-10, image: onzichtbaarBlokImage});
+    onzichtbaar_blok3 = new Kinetic.Image({X:-10, Y:-10, image: onzichtbaarBlokImage});
     
     end_background = new Kinetic.Image({X:0, Y:0, image: end_backgroundImage, opacity:0.3});
     end_background2 = new Kinetic.Image({X:0, Y:0, image: end_background2Image});

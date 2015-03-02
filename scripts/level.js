@@ -48,6 +48,11 @@ function start_level(){
 	
 	gameObjectsLayer.add(you_tutorial);	
 	gameObjectsLayer.add(zin_tutorial);	
+
+	//onzichtbaar block
+	gameObjectsLayer.add(onzichtbaar_blok1);
+	gameObjectsLayer.add(onzichtbaar_blok2);
+	gameObjectsLayer.add(onzichtbaar_blok3);
 	
 	//level_backgroundSound.play();
 
@@ -73,6 +78,8 @@ function level_level() {
 
 function update_level() {
 
+	console.log(levelSnelheid);
+
 	if(pause == false) {
 		levelSnelheid = 0;
 		if(keyPressList[32]) {
@@ -81,9 +88,9 @@ function update_level() {
 			you_tutorial.remove();
 		}
 	}
-	hero.setX(hero.getX() -1);
+	//hero.setX(hero.getX() -1);
 	if(pause == true && heroLife == 1) {
-		levelSnelheid = 2;
+		levelSnelheid = 5;
 		time += 0.02;
 		coinTime += 0.02;
 		gameObjectsLayer.add(showTime);
@@ -92,16 +99,32 @@ function update_level() {
 		coinTime = 0;
 		coins += 1;
 	}
+	if(coins >= 10) {
+		jumpBuy = true;
+
+	}
+	if(collision(hero, onzichtbaar_blok1)) {
+		hero.setY(onzichtbaar_blok1.getY() - 10);
+		hero.setX(hero.getX() + 3);
+	}
+	if(collision(hero, onzichtbaar_blok2)) {
+		hero.setY(onzichtbaar_blok2.getY() - 10);
+		hero.setX(hero.getX() + 3);
+	}
+	if(collision(hero, onzichtbaar_blok3)) {
+		hero.setY(onzichtbaar_blok3.getY() - 10);
+		hero.setX(hero.getX() + 3);
+	}
 	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 	//hero
 	//hero.setX(hero.getX() -2);
 	
-	if(currentGameState==GAME_STATE_LEVEL) {
-		 if(hero.getX() <= 0) {
-		 	switchGameState(GAME_STATE_INIT_LEVEL_END);
-		 	heroLife = 0;
-		 }
-	}
+	// if(currentGameState==GAME_STATE_LEVEL) {
+	// 	 if(coins == 11) {
+	// 	 	switchGameState(GAME_STATE_INIT_LEVEL_END);
+	// 	 	heroLife = 0;
+	// 	 }
+	// }
 	//spikes
 
 	spikes.setX(spikes.getX()-levelSnelheid);			//spikes sidescroll
@@ -112,29 +135,48 @@ function update_level() {
 	block2.setX(block2.getX()-levelSnelheid);			//block2 sidescroll
 	block3.setX(block3.getX()-levelSnelheid);			//block3 sidescroll
 
+	onzichtbaar_blok1.setX(block1.getX());
+	onzichtbaar_blok1.setY(block1.getY());
+	onzichtbaar_blok2.setX(block2.getX());
+	onzichtbaar_blok2.setY(block2.getY());
+	onzichtbaar_blok3.setX(block3.getX());
+	onzichtbaar_blok3.setY(block3.getY());
+
 	if(collision(block1, block2)) {
 		block1.setX(Math.floor((Math.random() * 1000) + 950));
-		block2.setX(Math.floor((Math.random() * 1000) + 950));
+		block1.setY(445)
 	}
 	if(collision(block1, block3)) {
-		block1.setX(Math.floor((Math.random() * 1000) + 950));
-		block3.setX(Math.floor((Math.random() * 1000) + 950));
+		block2.setX(Math.floor((Math.random() * 1400) + 1100));
+		block2.setY(445);
 	}
 	if(collision(block2, block3)) {
-		block2.setX(Math.floor((Math.random() * 1000) + 950));
-		block3.setX(Math.floor((Math.random() * 1000) + 950));
+		block3.setX(Math.floor((Math.random() * 1600) + 1400));
+		block3.setY(Math.floor((Math.random() * 100) + 0));
 	}
 	if(block1.getX() <= -200) {
 		block1.setX(Math.floor((Math.random() * 1000) + 950));
-		block1.setY(Math.floor((Math.random() * 300) + 200));
+		block1.setY(445);
+			if(block1.getX() >= block2.getX() +40) {
+				block1.setX(Math.floor((Math.random() * 1000) + 950));
+				block2.setX(Math.floor((Math.random() * 1000) + 950));
+			}
 	}
 	if(block2.getX() <= -200) {
-		block2.setX(Math.floor((Math.random() * 1000) + 950));
-		block2.setY(Math.floor((Math.random() * 300) + 200));
+		block2.setX(Math.floor((Math.random() * 1400) + 1100));
+		block2.setY(445);
+			if(block1.getX() >= block3.getX() +40) {
+				block1.setX(Math.floor((Math.random() * 1000) + 950));
+				block3.setX(Math.floor((Math.random() * 1000) + 950));
+			}
 	}
 	if(block3.getX() <= -200) {
-		block3.setX(Math.floor((Math.random() * 1000) + 950));
-		block3.setY(Math.floor((Math.random() * 300) + 200));
+		block3.setX(Math.floor((Math.random() * 1600) + 1400));
+		block3.setY(Math.floor((Math.random() * 100) + 0));
+			if(block2.getX() >= block3.getX() +40) {
+				block2.setX(Math.floor((Math.random() * 1000) + 950));
+				block3.setX(Math.floor((Math.random() * 1000) + 950));
+			}
 	}
 
 	//backgrounds
@@ -151,15 +193,15 @@ function update_level() {
 	
 	//collisions
 
-	/*if(collision(hero,spikes)){							//collison between hero and spikes
+	//if(collision(hero,spikes)){							//collison between hero and spikes
 	
-	}
+	//}
 	if (collision(block1, hero)) {						//collison between block 1 and hero
 		hero.setX(hero.getX()-2);
 	}
 	if (collision(block2, hero)) {						//collison between block 2 and hero
 		hero.setX(hero.getX()-2);
-	}*/
+	}
 
 	//health
 
@@ -189,25 +231,8 @@ function update_level() {
 		JTimer = 0;
 		heroInAir = false;
 	}
-	// if(heroInAir == true) {
-	// 	jumpSpeed += gravity;
-	// }
-
-	blockCollision(block1.getX() + 70, block1.getY(), block1.getX() + 70, block1.getY());
-	blockCollision(block2.getX() + 70, block2.getY(), block2.getX() + 70, block2.getY());
-	blockCollision(block3.getX() + 70, block3.getY(), block3.getX() + 70, block3.getY());
-
+	
 	gameObjectsLayer.draw();
-}
-	function blockCollision(x1, y1, x2, y2){
-		if (hero.getX() >= x1 && hero.getY() <= y1 && hero.getX() <= x2) {
-			collisionHight = y1 -30;
-		}
-		if (hero.getX() >= x1 && hero.getY() <= y2 && hero.getY() >= y1 && hero.getX() <= x2) {
-			hero.setY(y2 + 1);
-			upTimer = 0;
-		}
-
 }
 	
 
