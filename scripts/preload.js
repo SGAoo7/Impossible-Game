@@ -71,6 +71,8 @@ function init() {
     bullet_lolImage = preload('assets/bullet_lol.png');
     jump_lolImage = preload('assets/jump_lol.png');
     coin_lolImage = preload('assets/coin_lol.png');
+    
+    bulletImage = preload('assets/bullet.png');
 
 
     
@@ -155,7 +157,7 @@ function makeKineticImages() {
     shop_bullets = new Kinetic.Image({X: 270, Y:20, image: shop_bulletsImage, opacity: 0.5});
     shop_jump = new Kinetic.Image({X: 485, Y:20, image: shop_jumpImage, opacity: 0.5});
     shop_coin = new Kinetic.Image({X: 700, Y:20, image: shop_coinImage, opacity: 0.5});
-    shop_arrow = new Kinetic.Image({X:320, Y:455, image: menu_arrowImage, opacity: 0.6});
+    shop_arrow = new Kinetic.Image({X:320, Y:455, image: menu_arrowImage});
     shop_enter = new Kinetic.Image({X:700, Y:455, image: shop_enterImage, opacity: 0.6});
    
     cost_bullets = new Kinetic.Image({X:310, Y:380, image: costs_bulletsImage, opacity: 0.6});
@@ -167,6 +169,8 @@ function makeKineticImages() {
     jump_lol = new Kinetic.Image({X: 40, Y:290, image: jump_lolImage});
     coin_lol = new Kinetic.Image({X: 40, Y:330, image: coin_lolImage});
     shop_abilities = new Kinetic.Image({X: 70, Y:200, image: shop_abilitiesImage});
+   
+    //bullet_shoot = new Kinetic.Image({X: 0, Y:0, image: bulletImage});
 
 
       

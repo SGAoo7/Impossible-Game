@@ -20,11 +20,18 @@ var coinBackTrigger = false;
 
 var jumpBuy = false;
 var jumpExtraBuy = false;
-var jumpCosts = 10
+var bulletBuy = false;
+var bulletExtraBuy = false;
+var coinsBuy = false;
+var coinsExtraBuy = false;
+
+var useJumpAbility = false;
+var useCoinAbility = false;
+var useBulletAbility = false;
 
 var coins = 0;
 var showCoins = new Kinetic.Text({x: 150,y: 120,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
-var bullet = 0;
+var bullet = 1;
 var showBullets = new Kinetic.Text({x: 150,y: 250,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
 var jump = 0;
 var showJumps = new Kinetic.Text({x: 150,y: 290,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
@@ -94,8 +101,9 @@ function update_shop() {
 		cost_bullets.opacity(1);
 		shop_enter.opacity(1);
 		bulletTrigger = false;
-		keyPressList[39] = false
-		jumpTrigger = true
+		keyPressList[39] = false;
+		jumpTrigger = true;
+		bulletExtraBuy = true;
 		jumpExtraBuy = false;
 	}	
 	if(keyPressList[39] && jumpTrigger == true) {
@@ -107,6 +115,8 @@ function update_shop() {
 		jumpTrigger = false;
 		coinTrigger = true;
 		jumpExtraBuy = true;
+		bulletExtraBuy = false;
+		coinsExtraBuy = false;
 		shop_bullets.opacity(0.6);
 	}
 	if(keyPressList[39] && coinTrigger == true) {
@@ -118,6 +128,8 @@ function update_shop() {
 		jumpBackTrigger = true;
 		keyPressList[39] = false;
 		jumpBackTrigger = true;
+		jumpExtraBuy = false;
+		coinsExtraBuy = true;
 		jumpBuy = false;
 	}
 	if(keyPressList[37] && jumpBackTrigger == true) {
@@ -129,6 +141,8 @@ function update_shop() {
 		shop_coin.opacity(0.6);
 		cost_coin.opacity(0.6);
 		cost_jump.opacity(1);
+		bulletExtraBuy = false;
+		coinsExtraBuy = false;
 		jumpExtraBuy = true;
 	}
 	if(keyPressList[37] && bulletBackTrigger == true) {
@@ -140,14 +154,32 @@ function update_shop() {
 		cost_jump.opacity(0.6);
 		shop_bullets.opacity(1);
 		cost_bullets.opacity(1);
+		bulletExtraBuy = true
 		jumpExtraBuy = false;
 	}
 	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true) {
-		coins - 10;
-		jump = 1;
-		// if(coins <= 0) {
-		// 	coins = 0;
-		// }
+		coins -= 10;
+		jump += 1;
+		keyPressList[13] = false;
+		 if(coins <= 0) {
+		 	coins = 0;
+		 }
+	}
+	if(keyPressList[13] && bulletBuy == true && bulletExtraBuy == true) {
+		coins -= 12;
+		bullet += 1;
+		keyPressList[13] = false;
+		 if(coins <= 0) {
+		 	coins = 0;
+		 }
+	}
+	if(keyPressList[13] && coinsBuy == true && coinsExtraBuy == true) {
+		coins -= 11;
+		faster += 1;
+		keyPressList[13] = false;
+		 if(coins <= 0) {
+		 	coins = 0;
+		 }
 	}
 }
 	
