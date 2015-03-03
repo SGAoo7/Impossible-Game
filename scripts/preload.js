@@ -152,7 +152,7 @@ function makeKineticImages() {
     zin_tutorial = new Kinetic.Image({X:10, Y:10, image: zinTutorialImage});
     
     shop_background = new Kinetic.Image({X: -7, Y:0, image: shop_backgroundImage});
-    shop_escape = new Kinetic.Image({X: 30, Y:455, image: shop_escapeImage, opacity: 0.6});
+    shop_escape = new Kinetic.Image({X: 30, Y:455, image: shop_escapeImage, opacity: 1});
     shop_shop = new Kinetic.Image({X: 40, Y:25, image: shop_shopImage, opacity: 1});
     shop_bullets = new Kinetic.Image({X: 270, Y:20, image: shop_bulletsImage, opacity: 0.5});
     shop_jump = new Kinetic.Image({X: 485, Y:20, image: shop_jumpImage, opacity: 0.5});

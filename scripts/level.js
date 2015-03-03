@@ -9,7 +9,6 @@ var canJump = true;
 var jumpSpeed = 10;
 var JTimer = 0;
 var jumpTimer = 0;
-
 var gravity = 10;
 
 var collisionBorder = 495;
@@ -26,9 +25,14 @@ var bulletShoot = false;
 var time = 0;
 var coinTime = 0;
 var showTime = new Kinetic.Text({x: 10,y: 10,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
+var shopShow = new Kinetic.Text({x: 650,y: 10,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
+var koopShow = new Kinetic.Text({x: 540,y: 40,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
+var bulletAbilityShow = new Kinetic.Text({x: 400,y: 470,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
+var jumpAbilityShow = new Kinetic.Text({x: 400,y: 440,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
+var coinAbilityShow = new Kinetic.Text({x: 400,y: 410,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var bullets = [];
 
-//var level_backgroundSound = new Audio('assets/level_background.mp3');
+var level_backgroundSound = new Audio('assets/level_background.mp3');
 
 // all the variables.
 
@@ -59,8 +63,10 @@ function start_level(){
 	gameObjectsLayer.add(onzichtbaar_blok1);
 	gameObjectsLayer.add(onzichtbaar_blok2);
 	gameObjectsLayer.add(onzichtbaar_blok3);
+	gameObjectsLayer.add(shopShow);
+	gameObjectsLayer.add(koopShow);
 	
-	//level_backgroundSound.play();
+	
 
 	hero.offsetY(50);
 	hero.setY(495);
@@ -79,29 +85,53 @@ function level_level() {
 	//update();
 	//20 is de 'wachttijd in milliseconden, de functie 'update' wordt om de 0.02 s aangeroepen.
 	// Dit voorbeeld is dus 50 fps (mits de hardware het aankan)
-	
 }
 
 
 function update_level() {
 
+	level_backgroundSound.volume = 0.2;
+
+	shopShow.setText('*You can buy things in the shop*');
+	koopShow.setText('*For every 30 seconds you live you get 1 coin*');
+	bulletAbilityShow.setText('When you play the game, press "q" and then enter to shoot.');
+	jumpAbilityShow.setText('When you play the game, press "w" and you will jump higher.');
+	coinAbilityShow.setText('When you play the game, press "e" and you will get more money.');
+
 	//hero.setX(hero.getX() -1);
 	if(currentGameState == GAME_STATE_LEVEL) {
 		if(hero.getX() <= 0) {
 			heroLife = 0;
+			level_backgroundSound.pause();
 			switchGameState(GAME_STATE_INIT_LEVEL_END);
 		}
-	} 
-	if(pause == false) {
+	}
+	if(bullet >= 1 && pause == false) {
+		gameObjectsLayer.add(bulletAbilityShow);
+	}  
+	if(jump >= 1 && pause == false) {
+		gameObjectsLayer.add(jumpAbilityShow);
+	}
+	if(faster >= 1 && pause == false) {
+		gameObjectsLayer.add(coinAbilityShow);
+	}
+ 	if(pause == false) {
 		levelSnelheid = 0;
+		  
 		if(keyPressList[32]) {
 			pause = true;
 			zin_tutorial.remove();
 			you_tutorial.remove();
+			shopShow.remove();
+			bulletAbilityShow.remove();
+			jumpAbilityShow.remove();
+			coinAbilityShow.remove();
+			koopShow.remove();
 		}
 	}
 	if(pause == true && heroLife == 1) {
 		levelSnelheid = 3;
+		level_backgroundSound.play();
 		time += 0.02;
 		coinTime += 1;
 		gameObjectsLayer.add(showTime);
@@ -116,7 +146,7 @@ function update_level() {
 					}
 			}
 			if(useJumpAbility == true) {
-				useAbilityTimer -= 1.02;
+				useAbilityTimer -= 0.02;
 				jumpSpeed = 20
 					if(useAbilityTimer <= 0) {
 						useJumpAbility = false;
@@ -131,25 +161,26 @@ function update_level() {
 					bulletTimer = 30;
 					bulletShoot = false;
 					bullets.push(new Kinetic.Image({x:hero.getX() + 50, Y:hero.getY() - 30, image:bulletImage}))
-						for(i=0; i<bullets.length; i++) {
+					for(i=0; i<bullets.length; i++) {
 							gameObjectsLayer.add(bullets[i]);
-						}
+					}
 				}
-				
 					if(useAbilityTimer <= 0) {
 						useBulletAbility = false;
-						bullet -= 0;
+						bullet -= 1;
 						useAbilityTimer = 30;
 					}
 			}
 			
 	}
+	//timer for when you can shoot again.
 	if(bulletTimer > 0) {
 		bulletTimer -=1;
 		if(bulletTimer == 0) {
 			bulletShoot = true;
 		}
 	}
+	//collision with bullet[i] and the different blocks.
 	for (i=0;i<bullets.length;i++) {
 	if (collision(bullets[i],block1)){
 		block1.remove();					
@@ -174,67 +205,58 @@ function update_level() {
 		bullets[i].setY(600);
 	}
 }
+	//bullets[i] border
 	for(i=0;i<bullets.length;i++) {							
 		if (bullets[i].getX()>=950) {
-			bullets.splice(i,1);
+			bullets[i].setY(600);
 		}
 	}
+	//bullets[i] move
 	for(i=0; i<bullets.length; i++) {
 		bullets[i].setX(bullets[i].getX() + 2);
 	}
-	if(jump >= 1 && keyPressList[81]) {
+	
+	//jump ability activator
+	if(jump >= 1 && keyPressList[87]) {
 		useJumpAbility = true;		
 	}
 	if(jump == 0) {
 		useJumpAbility = false;
 	}
-	if(faster >= 1 && keyPressList[81]) {
+	//faster coins ability activator
+	if(faster >= 1 && keyPressList[69]) {
 		useCoinAbility = true;		
 	}
 	if(faster == 0) {
 		useCoinAbility = false;
 	}
+	//bullet ability activator
 	if(bullet >= 1 && keyPressList[81]) {
 		useBulletAbility = true;
 	}
 	if(bullet == 0) {
 		useBulletAbility = false;
 	}
+	//coins timer
 	if(coinTime >= 1) {
 		coinTime = 0;
 		coins += 1;
 	}
-	if(coins >= 10) {
-		jumpBuy = true;
-	}
-	else {
-		jumpBuy = false;
-	}
-	if(coins>= 12) {
-		bulletBuy = true;
-	}
-	else {
-		bulletBuy = false;
-	}
-	if(coins>= 11) {
-		coinsBuy = true;
-	}
-	else {
-		coinsBuy = false;
-	}
+	
+	//collison with hero and onzichtbaren blocks.
 	if(collision(hero, onzichtbaar_blok1)) {
 		hero.setY(onzichtbaar_blok1.getY() - 10);
-		hero.setX(hero.getX() + 3);
+		hero.setX(hero.getX() + levelSnelheid);
 		JTimer = 0;
 	}
 	if(collision(hero, onzichtbaar_blok2)) {
 		hero.setY(onzichtbaar_blok2.getY() - 10);
-		hero.setX(hero.getX() + 3);
+		hero.setX(hero.getX() + levelSnelheid);
 		JTimer = 0;
 	}
 	if(collision(hero, onzichtbaar_blok3)) {
 		hero.setY(onzichtbaar_blok3.getY() - 10);
-		hero.setX(hero.getX() + 3);
+		hero.setX(hero.getX() + levelSnelheid);
 		JTimer = 0;
 	}
 
@@ -249,6 +271,8 @@ function update_level() {
 	block2.setX(block2.getX()-levelSnelheid);			//block2 sidescroll
 	block3.setX(block3.getX()-levelSnelheid);			//block3 sidescroll
 
+	
+	//set onzichtbaar blokken on the X of normal blocks.
 	onzichtbaar_blok1.setX(block1.getX());
 	onzichtbaar_blok1.setY(block1.getY());
 	onzichtbaar_blok2.setX(block2.getX());
@@ -271,9 +295,9 @@ function update_level() {
 	if(block1.getX() <= -200) {
 		block1.setX(Math.floor((Math.random() * 1000) + 950));
 		block1.setY(445);
-		if(herhalenLevel == true){
-			gameObjectsLayer.add(block1);
-		}
+		if(currentGameState == GAME_STATE_LEVEL) {
+		gameObjectsLayer.add(block1);
+	}
 			if(block2.getX() >= block1.getX() +40) {
 				block2.setX(block1.getX()+Math.floor((Math.random() * 100) + 50));
 			}
@@ -281,14 +305,17 @@ function update_level() {
 	if(block2.getX() <= -200) {
 		block2.setX(Math.floor((Math.random() * 1400) + 1100));
 		block2.setY(445);
-		if(herhalenLevel == true){
-			gameObjectsLayer.add(block1);
-		}
+		if(currentGameState == GAME_STATE_LEVEL) {
+		gameObjectsLayer.add(block2);
+	}
 			if(block1.getX() >= block2.getX() +40) {
 				block1.setX(block2.getX()+Math.floor((Math.random() * 100) + 50));
 			}
 	}
 	if(block3.getX() <= -200) {
+		if(currentGameState == GAME_STATE_LEVEL) {
+		gameObjectsLayer.add(block3);
+	}
 		block3.setX(Math.floor((Math.random() * 1600) + 1400));
 		block3.setY(Math.floor((Math.random() * 350) + 300));
 	}
@@ -316,26 +343,24 @@ function update_level() {
 	if (collision(block2, hero)) {						//collison between block 2 and hero
 		hero.setX(hero.getX()-levelSnelheid);
 	}
-
-	//health
 	
 	//jump and gravity sysmtem
 
-	if(keyPressList[32] && canJump == true && jumpTimer <= 0 && JTimer <= 0) {
+	if(keyPressList[32] && canJump == true && jumpTimer <= 0 && JTimer <= 0) {			//if this is all true you can jump
 		canJump = false;
 		jumpTimer = 10;
 		keyPressList[32] = false;
-	}
-	if(jumpTimer <= 0){
+	}	
+	if(jumpTimer <= 0){  																//jumptimer canjump true
 		canJump = true;
 	}
-	else {
-		jumpTimer -= 1 ;
+	else {																				
+		jumpTimer -= 1;
 	}
-	if(canJump == false) {
+	if(canJump == false) {																//move up if you jump
 		hero.setY(hero.getY() -jumpSpeed);
 	}
-	else if(hero.getY() < collisionBorder) {
+	else if(hero.getY() < collisionBorder) {											//move down if you jump
 		JTimer += 1;
 		hero.setY(hero.getY() + gravity);
 	}

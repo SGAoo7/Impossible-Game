@@ -31,12 +31,16 @@ var useBulletAbility = false;
 
 var coins = 0;
 var showCoins = new Kinetic.Text({x: 150,y: 120,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
-var bullet = 1;
+var bullet = 0;
 var showBullets = new Kinetic.Text({x: 150,y: 250,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
 var jump = 0;
 var showJumps = new Kinetic.Text({x: 150,y: 290,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
 var faster = 0;
 var showFaster = new Kinetic.Text({x: 150,y: 330,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
+
+var shop_buySound = new Audio('assets/shop_buySound.mp3');
+var shop_backgroundSound = new Audio('assets/shop_backgroundSound.mp3');
+
 // all the variables.
 
 function start_shop(){
@@ -69,6 +73,7 @@ function start_shop(){
 	gameObjectsLayer.add(showJumps);
 	gameObjectsLayer.add(showFaster);
 	
+	shop_backgroundSound.play();
 	gameObjectsLayer.draw();
 
 	level_shop();
@@ -87,16 +92,19 @@ function level_shop() {
 
 function update_shop() {
 
+	//set all text and scale all images
 	showCoins.setText(coins);	
 	showBullets.setText(bullet);	
 	showJumps.setText(jump);	
 	showFaster.setText(faster);	
 	end_background.scale({x: 0.5, y: 0.45});
 	shop_background.scale({x: 1.51, y: 1.28});
-	if(keyPressList[27]) {
+	
+	if(keyPressList[27]) {										//esc button
+		shop_backgroundSound.pause();
 		switchGameState(GAME_STATE_INIT_LEVEL_END);
 	}
-	if(keyPressList[39] && bulletTrigger == true) {
+	if(keyPressList[39] && bulletTrigger == true) {				//bullet buy active
 		shop_bullets.opacity(1);
 		cost_bullets.opacity(1);
 		shop_enter.opacity(1);
@@ -106,7 +114,7 @@ function update_shop() {
 		bulletExtraBuy = true;
 		jumpExtraBuy = false;
 	}	
-	if(keyPressList[39] && jumpTrigger == true) {
+	if(keyPressList[39] && jumpTrigger == true) {				//jump buy active
 		bulletBackTrigger = true;
 		shop_jump.opacity(1);
 		cost_jump.opacity(1);
@@ -119,7 +127,7 @@ function update_shop() {
 		coinsExtraBuy = false;
 		shop_bullets.opacity(0.6);
 	}
-	if(keyPressList[39] && coinTrigger == true) {
+	if(keyPressList[39] && coinTrigger == true) {				//coin buy active
 		shop_coin.opacity(1);
 		cost_coin.opacity(1);
 		shop_jump.opacity(0.6);
@@ -132,7 +140,7 @@ function update_shop() {
 		coinsExtraBuy = true;
 		jumpBuy = false;
 	}
-	if(keyPressList[37] && jumpBackTrigger == true) {
+	if(keyPressList[37] && jumpBackTrigger == true) {			//jump back buy active
 		jumpBackTrigger = false;
 		coinTrigger = true;
 		bulletBackTrigger = true;
@@ -145,7 +153,7 @@ function update_shop() {
 		coinsExtraBuy = false;
 		jumpExtraBuy = true;
 	}
-	if(keyPressList[37] && bulletBackTrigger == true) {
+	if(keyPressList[37] && bulletBackTrigger == true) {			//bullet back buy active
 		bulletBackSTrigger = false;
 		coinTrigger = true;
 		jumpTrigger = true;
@@ -157,29 +165,53 @@ function update_shop() {
 		bulletExtraBuy = true
 		jumpExtraBuy = false;
 	}
-	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true) {
+	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true) {			//buy jump
 		coins -= 10;
+		shop_buySound.play();
 		jump += 1;
 		keyPressList[13] = false;
 		 if(coins <= 0) {
 		 	coins = 0;
 		 }
 	}
-	if(keyPressList[13] && bulletBuy == true && bulletExtraBuy == true) {
+	if(keyPressList[13] && bulletBuy == true && bulletExtraBuy == true) {		//buy bullet
 		coins -= 12;
 		bullet += 1;
+		shop_buySound.play();
+		keyPressList[13] = false;
+		 if(coins <= 0) {
+		 	coins = 0;
+		 }
+	}	
+	if(keyPressList[13] && coinsBuy == true && coinsExtraBuy == true) {			//buy faster coins
+		coins -= 11;
+		faster += 1;
+		shop_buySound.play();
 		keyPressList[13] = false;
 		 if(coins <= 0) {
 		 	coins = 0;
 		 }
 	}
-	if(keyPressList[13] && coinsBuy == true && coinsExtraBuy == true) {
-		coins -= 11;
-		faster += 1;
-		keyPressList[13] = false;
-		 if(coins <= 0) {
-		 	coins = 0;
-		 }
+	//can you buy jump ability?
+	if(coins >= 10) {
+		jumpBuy = true;
+	}
+	else {
+		jumpBuy = false;
+	}
+	//can you buy bullet ability?
+	if(coins>= 12) {
+		bulletBuy = true;
+	}
+	else {
+		bulletBuy = false;
+	}
+	//can you buy faster coins ability?
+	if(coins>= 11) {
+		coinsBuy = true;
+	}
+	else {
+		coinsBuy = false;
 	}
 }
 	

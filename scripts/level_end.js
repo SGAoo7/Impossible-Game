@@ -17,6 +17,9 @@ var quitBackTrigger = true;
 var herhalenLevel = false;
 var herhalenMenu = false;
 var theShop = false;
+
+var gameOverSound = new Audio('assets/GameOverSound.mp3');
+
 // all the variables.
 
 function start_end(){
@@ -34,7 +37,7 @@ function start_end(){
 	gameObjectsLayer.add(try_again2);
 	gameObjectsLayer.add(shop2);
 	gameObjectsLayer.add(quit_game2);
-	
+	gameOverSound.play();
 
 	gameObjectsLayer.draw();
 	
@@ -54,10 +57,8 @@ function level_end() {
 
 function update_end() {
 	
+	
 	if(currentGameState==GAME_STATE_END) {
-
-	herhalenLevel = false;
-
 
 	//scale all images
 	end_background.scale({x: 0.5, y: 0.45});
@@ -90,6 +91,7 @@ function update_end() {
 		shopBackTrigger = false;
 		quitTrigger = false;
 		keyPressList[38] = false;
+		selectSound.play();
 	}
 	if(keyPressList[40] && menuTrigger == true){						//menu button		
 		end_menu2.remove();	
@@ -108,6 +110,7 @@ function update_end() {
 		shopBackTrigger = false;
 		shopTrigger = true;
 		keyPressList[40] = false;
+		selectSound.play();
 	}	
 	if(keyPressList[38] && menuBackTrigger == true) {					//menu button back
 		try_again.remove();
@@ -126,6 +129,7 @@ function update_end() {
 		shopTrigger = true;
 		menuBackTrigger = false;
 		keyPressList[38] = false;
+		selectSound.play();
 	}
 	if(keyPressList[40] && shopTrigger == true) {						//shop button
 		end_menu.remove();
@@ -146,6 +150,7 @@ function update_end() {
 		TryTrigger = false;
 		shopBackTrigger = false;
 		keyPressList[40] = false;
+		selectSound.play();
 	}
 	if(keyPressList[38] && shopBackTrigger == true) {					//shop back button
 		quit_game.remove();
@@ -165,6 +170,7 @@ function update_end() {
 		TryTrigger = false;
 		quitTrigger = true;
 		keyPressList[38] = false;
+		selectSound.play();
 	} 
 	if(keyPressList[40] && quitBackTrigger == true) {					//quit back button
 		quit_game2.remove();
@@ -185,6 +191,7 @@ function update_end() {
 		quitTrigger = false;
 		enterQuit = true;
 		keyPressList[40] = false;
+		selectSound.play();
 	}
 	if(keyPressList[38] && quitTrigger == true) {						//quit button
 		quit_game.remove();
@@ -204,16 +211,19 @@ function update_end() {
 		quitTrigger = false;
 		quitBackTrigger = false;
 		keyPressList[38] = false;
+		selectSound.play();
 	}
 	if(keyPressList[13] && enterTry == true) {							//press try again button
 		switchGameState(GAME_STATE_INIT_LEVEL);
-		herhalenLevel = true;
+		gameOverSound.pause();
 	}
 	if(keyPressList[13] && enterMenu == true) {							//press menu button
 		switchGameState(GAME_STATE_INIT_LEVEL_MENU);
+		gameOverSound.pause();
 	}
 	if(keyPressList[13] && enterShop == true) {							//press shop button
 		switchGameState(GAME_STATE_INIT_LEVEL_SHOP);
+		gameOverSound.pause();
 	}
 	if(keyPressList[13] && enterQuit == true) {							//press quit button
 		window.close();
