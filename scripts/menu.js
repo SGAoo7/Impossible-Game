@@ -1,5 +1,6 @@
 var quitTrue = false;
 var startTrue = false;
+var begin = false;
 
 // all the variables.
 
@@ -16,8 +17,11 @@ function start_menu(){
 	gameObjectsLayer.add(menu_arrow);
 
 	gameObjectsLayer.draw();
+
+	hero.setX(100);
 			
 	switchGameState(GAME_STATE_MENU); 
+
 }
 
 
@@ -32,7 +36,7 @@ function level_menu() {
 
 function update_menu(){
 
-	if(currentGameState==GAME_STATE_MENU) {
+	if(currentGameState == GAME_STATE_MENU) {
 
 	background_menu.scale({x:0.5, y:0.5});
 	
@@ -52,9 +56,10 @@ function update_menu(){
 		window.close();
 		quitTrue = false;
 	}
-	if(keyPressList[13] && startTrue == true && currentGameState == GAME_STATE_MENU) {
+	if(keyPressList[13] && startTrue == true) {
 		switchGameState(GAME_STATE_INIT_LEVEL);
 		startTrue = false;
+		begin = true;
 	}
 	gameObjectsLayer.draw();
 	}

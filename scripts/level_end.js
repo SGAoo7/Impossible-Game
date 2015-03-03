@@ -14,6 +14,8 @@ var menuBackTrigger = false;
 var shopBackTrigger = false;
 var quitBackTrigger = true;
 
+var herhalenLevel = false;
+var herhalenMenu = false;
 var theShop = false;
 // all the variables.
 
@@ -53,6 +55,11 @@ function level_end() {
 function update_end() {
 	
 	if(currentGameState==GAME_STATE_END) {
+
+	herhalenLevel = false;
+
+
+	//scale all images
 	end_background.scale({x: 0.5, y: 0.45});
 	GameOver.scale({x: 1.5, y: 1.5});
 	end_menu.scale({x: 0.6, y: 0.6});
@@ -64,7 +71,7 @@ function update_end() {
 	quit_game.scale({x: 0.6, y: 0.6});
 	quit_game2.scale({x: 0.6, y: 0.6});
 
-	if(keyPressList[38] && TryTrigger == true) {				
+	if(keyPressList[38] && TryTrigger == true) {						//try again button.			
 		try_again2.remove();
 		gameObjectsLayer.add(try_again);
 		end_menu.remove();
@@ -84,7 +91,7 @@ function update_end() {
 		quitTrigger = false;
 		keyPressList[38] = false;
 	}
-	if(keyPressList[40] && menuTrigger == true){				
+	if(keyPressList[40] && menuTrigger == true){						//menu button		
 		end_menu2.remove();	
 		gameObjectsLayer.add(end_menu);
 		try_again.remove();
@@ -101,8 +108,8 @@ function update_end() {
 		shopBackTrigger = false;
 		shopTrigger = true;
 		keyPressList[40] = false;
-	}
-	if(keyPressList[38] && menuBackTrigger == true) {
+	}	
+	if(keyPressList[38] && menuBackTrigger == true) {					//menu button back
 		try_again.remove();
 		gameObjectsLayer.add(try_again2);
 		shop.remove();
@@ -120,7 +127,7 @@ function update_end() {
 		menuBackTrigger = false;
 		keyPressList[38] = false;
 	}
-	if(keyPressList[40] && shopTrigger == true) {
+	if(keyPressList[40] && shopTrigger == true) {						//shop button
 		end_menu.remove();
 		gameObjectsLayer.add(end_menu2)
 		shop2.remove();
@@ -140,7 +147,7 @@ function update_end() {
 		shopBackTrigger = false;
 		keyPressList[40] = false;
 	}
-	if(keyPressList[38] && shopBackTrigger == true) {
+	if(keyPressList[38] && shopBackTrigger == true) {					//shop back button
 		quit_game.remove();
 		gameObjectsLayer.add(quit_game2);
 		shop2.remove();
@@ -159,7 +166,7 @@ function update_end() {
 		quitTrigger = true;
 		keyPressList[38] = false;
 	} 
-	if(keyPressList[40] && quitBackTrigger == true) {
+	if(keyPressList[40] && quitBackTrigger == true) {					//quit back button
 		quit_game2.remove();
 		gameObjectsLayer.add(quit_game);
 		shop.remove();
@@ -179,7 +186,7 @@ function update_end() {
 		enterQuit = true;
 		keyPressList[40] = false;
 	}
-	if(keyPressList[38] && quitTrigger == true) {
+	if(keyPressList[38] && quitTrigger == true) {						//quit button
 		quit_game.remove();
 		gameObjectsLayer.add(quit_game2);
 		shop.remove();
@@ -198,20 +205,20 @@ function update_end() {
 		quitBackTrigger = false;
 		keyPressList[38] = false;
 	}
-	if(keyPressList[13] && enterTry == true && currentGameState == GAME_STATE_END) {
+	if(keyPressList[13] && enterTry == true) {							//press try again button
 		switchGameState(GAME_STATE_INIT_LEVEL);
+		herhalenLevel = true;
 	}
-	if(keyPressList[13] && enterMenu == true && currentGameState == GAME_STATE_END) {
+	if(keyPressList[13] && enterMenu == true) {							//press menu button
 		switchGameState(GAME_STATE_INIT_LEVEL_MENU);
 	}
-	if(keyPressList[13] && enterShop == true && currentGameState == GAME_STATE_END) {
+	if(keyPressList[13] && enterShop == true) {							//press shop button
 		switchGameState(GAME_STATE_INIT_LEVEL_SHOP);
 	}
-	if(keyPressList[13] && enterQuit == true && currentGameState == GAME_STATE_END) {
+	if(keyPressList[13] && enterQuit == true) {							//press quit button
 		window.close();
-		enterQuit = false;
 	}
-	showEndTime.setText('You survived '+ parseInt(time) + ' seconds');
+	showEndTime.setText('You survived '+ parseInt(time) + ' seconds');	//display how many times you survived
 }
 }
 	

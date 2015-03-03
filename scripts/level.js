@@ -64,6 +64,7 @@ function start_level(){
 
 	hero.offsetY(50);
 	hero.setY(495);
+	hero.setX(100);
 
 	
 	gameObjectsLayer.draw();
@@ -149,6 +150,35 @@ function update_level() {
 			bulletShoot = true;
 		}
 	}
+	for (i=0;i<bullets.length;i++) {
+	if (collision(bullets[i],block1)){
+		block1.remove();					
+		bullets[i].remove();
+		block1.setY(600);
+		bullets[i].setY(600);
+	}
+}
+	for (i=0;i<bullets.length;i++) {
+	if (collision(bullets[i],block2)){
+		block2.remove();					
+		bullets[i].remove();
+		block2.setY(600);
+		bullets[i].setY(600);
+	}
+}
+	for (i=0;i<bullets.length;i++) {
+	if (collision(bullets[i],block3)){
+		block3.remove();					
+		bullets[i].remove();
+		block3.setY(600);
+		bullets[i].setY(600);
+	}
+}
+	for(i=0;i<bullets.length;i++) {							
+		if (bullets[i].getX()>=950) {
+			bullets.splice(i,1);
+		}
+	}
 	for(i=0; i<bullets.length; i++) {
 		bullets[i].setX(bullets[i].getX() + 2);
 	}
@@ -210,15 +240,6 @@ function update_level() {
 
 	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 	//hero
-	//hero.setX(hero.getX() -2);
-	
-	// if(currentGameState==GAME_STATE_LEVEL) {
-	// 	 if(coins == 11) {
-	// 	 	switchGameState(GAME_STATE_INIT_LEVEL_END);
-	// 	 	heroLife = 0;
-	// 	 }
-	// }
-	//spikes
 
 	spikes.setX(spikes.getX()-levelSnelheid);			//spikes sidescroll
 
@@ -250,6 +271,9 @@ function update_level() {
 	if(block1.getX() <= -200) {
 		block1.setX(Math.floor((Math.random() * 1000) + 950));
 		block1.setY(445);
+		if(herhalenLevel == true){
+			gameObjectsLayer.add(block1);
+		}
 			if(block2.getX() >= block1.getX() +40) {
 				block2.setX(block1.getX()+Math.floor((Math.random() * 100) + 50));
 			}
@@ -257,6 +281,9 @@ function update_level() {
 	if(block2.getX() <= -200) {
 		block2.setX(Math.floor((Math.random() * 1400) + 1100));
 		block2.setY(445);
+		if(herhalenLevel == true){
+			gameObjectsLayer.add(block1);
+		}
 			if(block1.getX() >= block2.getX() +40) {
 				block1.setX(block2.getX()+Math.floor((Math.random() * 100) + 50));
 			}
@@ -315,7 +342,6 @@ function update_level() {
 	else {
 		JTimer = 0;
 	}
-	
 	gameObjectsLayer.draw();
 }
 	
