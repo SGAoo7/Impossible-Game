@@ -1,3 +1,4 @@
+// de collision functie die we hebben gebruikt.
 function collision(go1,go2){
 	//return true;
 	if(go1.getX()+go1.getWidth() >go2.getX()){

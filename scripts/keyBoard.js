@@ -1,3 +1,4 @@
+// keypresslist functie die we hebben gebruikt.
  var keyPressList=[];
 
 document.onkeydown = function(e){

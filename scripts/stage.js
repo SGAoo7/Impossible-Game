@@ -1,3 +1,4 @@
+// via deze functie kunnen we alle gameobjecten toevoegen aan het canvas.
 //var backgroundLayer = new Kinetic.Layer();
 var	gameObjectsLayer = new Kinetic.Layer();
 

@@ -1,11 +1,10 @@
+//deze variables zijn voor welke knop geselecteerd is
 var quitTrue = false;
 var startTrue = false;
-var begin = false;
-var selectSound = new Audio('assets/selectSound.wav');
-var menu_backgroundSound = new Audio ('assets/menu_backgroundSound.mp3');
 
-
-// all the variables.
+//deze variables zijn voor de audio in het menu te laten afspelen. selectSound wordt ook bij andere scripts gebruikt.
+var selectSound = new Audio('assets/audio/selectSound.wav');
+var menu_backgroundSound = new Audio ('assets/audio/menu_backgroundSound.mp3');
 
 function start_menu(){
 	// alle plaatjes in het level plaatsen, beginposities.
@@ -40,6 +39,7 @@ function level_menu() {
 
 function update_menu(){
 
+	//volume van audio regelen.
 	menu_backgroundSound.volume = 0.5;
 	selectSound.volume = 0.2
 	if(currentGameState == GAME_STATE_MENU) {
@@ -73,7 +73,6 @@ function update_menu(){
 		switchGameState(GAME_STATE_INIT_LEVEL);
 		startTrue = false;
 		menu_backgroundSound.pause();
-		begin = true;
 	}
 	gameObjectsLayer.draw();
 	}

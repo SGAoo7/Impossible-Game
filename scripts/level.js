@@ -1,10 +1,10 @@
-//health variables
+//leven variables
 var heroLife = 1;
 
-//level variables
-var levelSnelheid = 3;
+//level snelheid variable
+var levelSnelheid = 6;
 
-//gravity and jump variables
+//gravity en jump variables
 var canJump = true;
 var jumpSpeed = 10;
 var JTimer = 0;
@@ -12,38 +12,41 @@ var jumpTimer = 0;
 var gravity = 10;
 var collisionBorder = 495;
 
-//start var if you press space it's true.
+//start var. als je op spatie drukt ga je uit de tutorial.
 var pause = false;
 
-//ability timer that counts down from 30 to 0.
-var useAbilityTimer = 30;
+//ability timers die van 30 to 0 tellen. En als die 0 zijn kan je niet meer je ability gebruiken.
+var useAbilityTimerCoin = 30;
+var useAbilityTimerBullet = 30;
+var useAbilityTimerJump = 30;
 
 
-//vars so that you can shoot.
+//vars die zorgen dat je kan schieten.
 var bulletTimer = 30;
 var bulletShoot = false;
 
-//real timer
+//echte timer in het level.
 var time = 0;
-//cointimer that's is the same as realtimer only difference is that it gives you money.
+//deze var geeft je geld en werkt samen met de time var.
 var coinTime = 0;
 
-//tutorial vars in the beginning of the game.
+//laat de tutorial zien.
 var showTime = new Kinetic.Text({x: 10,y: 10,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var shopShow = new Kinetic.Text({x: 650,y: 10,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var koopShow = new Kinetic.Text({x: 540,y: 40,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
-//text vars to show ability tutorial.
+//laat de tutorial zien van de abilities. Als je die gekocht hebt, anders zie je ze niet.
 var bulletAbilityShow = new Kinetic.Text({x: 400,y: 470,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var jumpAbilityShow = new Kinetic.Text({x: 400,y: 440,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var coinAbilityShow = new Kinetic.Text({x: 400,y: 410,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 //bullet array
 var bullets = [];
-//var that controls the time in the level.
+//var die zorgt dat het script niet versneld wordt als je terug gaat van een ander script naar dit script.
 var levelSpeed = false;
 
-var level_backgroundSound = new Audio('assets/level_background.mp3');
-
-// all the variables.
+//sounds
+var level_backgroundSound = new Audio('assets/audio/level_background.mp3');
+var explosion = new Audio('assets/audio/explosion.wav');
+var shootAudio = new Audio('assets/audio/shoot.wav');
 
 function start_level(){
 	// alle plaatjes in het level plaatsen, beginposities.
@@ -56,38 +59,34 @@ function start_level(){
 	
 	//hero
 	gameObjectsLayer.add(hero);
-	
-	//spikes
-	gameObjectsLayer.add(spikes);
 
-	//block 1, 2 and 3
+	//block 1, 2 en 3
 	gameObjectsLayer.add(block1);
 	gameObjectsLayer.add(block2);	
 	gameObjectsLayer.add(block3);	
 	
+	//tutorial
 	gameObjectsLayer.add(you_tutorial);	
 	gameObjectsLayer.add(zin_tutorial);	
-
+	gameObjectsLayer.add(shopShow);
+	gameObjectsLayer.add(koopShow);
+	
 	//onzichtbaar block
 	gameObjectsLayer.add(onzichtbaar_blok1);
 	gameObjectsLayer.add(onzichtbaar_blok2);
 	gameObjectsLayer.add(onzichtbaar_blok3);
-	gameObjectsLayer.add(shopShow);
-	gameObjectsLayer.add(koopShow);
+
 	
 	
-	//reset all gameobject if you switch back to this level.
+	//reset alle gameobject als je terug switcht van een ander script naar dit script.
 	hero.offsetY(50);
 	hero.setY(495);
 	hero.setX(100);
 	background1.setX(0);
 	background2.setX(1000);
-	spikes.setX(900);
 	block1.setX(1200);
-	block2.setX(1400);
-	block3.setX(1600);
-
-
+	block2.setX(1900);
+	block3.setX(2400);
 	
 	gameObjectsLayer.draw();
 			
@@ -97,7 +96,7 @@ function start_level(){
 
 
 function level_level() {
-	//this will not make your game speed up if you swith back to this level.
+	//zorgt ervoor dat je game niet versneldt. als je van terug switch van een ander script naar dit script.
 	if(levelSpeed == false) {
 	gameLoop=setInterval(update_level,20);  
 	levelSpeed = true;
@@ -110,18 +109,19 @@ function level_level() {
 
 function update_level() {
 
-	//volume of background music
+	//volume van audio regelen
 	level_backgroundSound.volume = 0.2;
+	explosion.volume = 0.5;
 
-	//set all text
+	//display alle images
 	shopShow.setText('*You can buy things in the shop*');
-	koopShow.setText('*For every 30 seconds you live you get 1 coin*');
+	koopShow.setText('*For every 15 seconds you live you get 1 coin*');
 	bulletAbilityShow.setText('When you play the game, press "q" and then enter to shoot.');
 	jumpAbilityShow.setText('When you play the game, press "w" and you will jump higher.');
 	coinAbilityShow.setText('When you play the game, press "e" and you will get more money.');
 	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 
-	//if statement when you die
+	//if statement als je doodgaat.
 	if(currentGameState == GAME_STATE_LEVEL) {
 		if(hero.getX() <= 0) {
 			heroLife = 0;
@@ -131,7 +131,7 @@ function update_level() {
 			switchGameState(GAME_STATE_INIT_LEVEL_END);
 		}
 	}
-	//if you buyed an ability tutorial will show
+	//als je een ability gekocht hebt zie je de tutorial ervan.
 	if(bullet >= 1 && pause == false) {
 		gameObjectsLayer.add(bulletAbilityShow);
 	}  
@@ -141,7 +141,7 @@ function update_level() {
 	if(faster >= 1 && pause == false) {
 		gameObjectsLayer.add(coinAbilityShow);
 	}
- 	//start if you press space
+ 	//start als je spatie drukt
  	if(pause == false) {
 		levelSnelheid = 0;
 		  
@@ -156,65 +156,67 @@ function update_level() {
 			koopShow.remove();
 		}
 	}
-	//timer and level play
+	//timer en level play
 	if(pause == true && heroLife == 1) {
-		levelSnelheid = 3;
+		levelSnelheid = 6;
 		level_backgroundSound.play();
 		time += 0.02;
-		coinTime += 1;
+		coinTime += 0.02;
 		gameObjectsLayer.add(showTime);
-			//use coin ability for 30 seconds
+			//gebruik coin ability voor 30 seconden
 			if(useCoinAbility == true) {
-				useAbilityTimer -= 1.02;
-				coins += 1;
-					if(useAbilityTimer <= 0) {
-						useCoinAbility = false;
-						faster -= 0;
-						coins += 0;
-						useAbilityTimer = 30;
-					}
+				useAbilityTimerCoin -= 0.02;
+				coinTime += 0.04;
+				if(useAbilityTimerCoin <= 0) {
+					coinTime += 0.02;
+					useCoinAbility = false;
+					useAbilityTimerCoin = 30;
+					faster --;
+				}
 			}
-			//use jump ability for 30 seconds
+			//gebruik jump ability voor 30 seconden
 			if(useJumpAbility == true) {
-				useAbilityTimer -= 0.02;
+				useAbilityTimerJump -= 0.02;
 				jumpSpeed = 20
-					if(useAbilityTimer <= 0) {
-						useJumpAbility = false;
-						jump -= 0;
-						jumpSpeed = 10;
-						useAbilityTimer = 30;
-					}
+				if(useAbilityTimerJump <= 0) {
+					jumpSpeed = 10;
+					useJumpAbility = false;
+					useAbilityTimerJump = 30;
+					jump --;
+				}
 			}
-			//use bullet ability for 30 seconds and make bullets.
+			//gebruik bullet ability voor 30 seconden en maak bullets aan.
 			if(useBulletAbility == true) {
-				useAbilityTimer -= 0.02;
+				useAbilityTimerBullet -= 0.02;
 				if(keyPressList[13] && bulletShoot == true) {
 					bulletTimer = 30;
 					bulletShoot = false;
+					shootAudio.play();
 					bullets.push(new Kinetic.Image({x:hero.getX() + 50, Y:hero.getY() - 30, image:bulletImage}))
+					if(useAbilityTimerBullet <= 0) {
+						useBulletAbility = false;
+						useAbilityTimerBullet = 30;
+						bullet --;
+					}
 					for(i=0; i<bullets.length; i++) {
 							gameObjectsLayer.add(bullets[i]);
 					}
 				}
-					if(useAbilityTimer <= 0) {
-						useBulletAbility = false;
-						bullet -= 1;
-						useAbilityTimer = 30;
-					}
-			}
-			
+			}	
 	}
-	//timer for when you can shoot again.
+	//timer zodat je niet achter elkaar kan schieten.
 	if(bulletTimer > 0) {
 		bulletTimer -=1;
 		if(bulletTimer == 0) {
 			bulletShoot = true;
 		}
 	}
-	//collision with bullet[i] and the different blocks.
+	//collision met bullet[i] en de verschillende blokken.
 	for (i=0;i<bullets.length;i++) {
 	if (collision(bullets[i],block1)){
-		block1.remove();					
+		block1.remove();
+		explosion.play();
+		onzichtbaar_blok1.setY(600);					
 		bullets[i].remove();
 		block1.setY(600);
 		bullets[i].setY(600);
@@ -224,15 +226,19 @@ function update_level() {
 	if (collision(bullets[i],block2)){
 		block2.remove();					
 		bullets[i].remove();
+		explosion.play();
+		onzichtbaar_blok2.setY(600);	
 		block2.setY(600);
 		bullets[i].setY(600);
 	}
 }
 	for (i=0;i<bullets.length;i++) {
 	if (collision(bullets[i],block3)){
-		block3.remove();					
+		block3.remove();	
+		explosion.play();				
 		bullets[i].remove();
 		block3.setY(600);
+		onzichtbaar_blok3.setY(600);	
 		bullets[i].setY(600);
 	}
 }
@@ -242,7 +248,7 @@ function update_level() {
 			bullets[i].setY(600);
 		}
 	}
-	//bullets[i] move
+	//bullets[i] bewegen
 	for(i=0; i<bullets.length; i++) {
 		bullets[i].setX(bullets[i].getX() + 2);
 	}
@@ -268,32 +274,46 @@ function update_level() {
 	if(bullet == 0) {
 		useBulletAbility = false;
 	}
-	//coins timer
-	if(coinTime >= 1) {
+	//coins timer. als je cointime 15 is krijg je een coin.
+	if(coinTime >= 15) {
 		coinTime = 0;
 		coins += 1;
 	}
 	
-	//collison with hero and onzichtbaren blocks.
+	//collison met hero en de verschillende blokken, en ik heb hier een systeem gemaakt waardoor je kan springen als je op een blok staat.
 	if(collision(hero, onzichtbaar_blok1)) {
 		hero.setY(onzichtbaar_blok1.getY() - 10);
 		hero.setX(hero.getX() + levelSnelheid);
-		JTimer = 0;
+		if(keyPressList[32]) {
+			hero.setY(hero.getY() - 50);	
+			JTimer = 0;
+			jumpTimer = 0;
+			canJump = true;		
+			}
+		
 	}
 	if(collision(hero, onzichtbaar_blok2)) {
 		hero.setY(onzichtbaar_blok2.getY() - 10);
 		hero.setX(hero.getX() + levelSnelheid);
+		if(keyPressList[32]) {
+		hero.setY(hero.getY() - 50);	
 		JTimer = 0;
+		jumpTimer = 0;	
+		canJump = true;
+		}
+		
 	}
 	if(collision(hero, onzichtbaar_blok3)) {
 		hero.setY(onzichtbaar_blok3.getY() - 10);
 		hero.setX(hero.getX() + levelSnelheid);
+		if(keyPressList[32]) {
+		hero.setY(hero.getY() - 50);	
 		JTimer = 0;
+		jumpTimer = 0;	
+		canJump = true;
+		}
+
 	}
-
-	//hero
-
-	spikes.setX(spikes.getX()-levelSnelheid);			//spikes sidescroll
 
 	//block 1, 2 and 3
 
@@ -302,7 +322,7 @@ function update_level() {
 	block3.setX(block3.getX()-levelSnelheid);			//block3 sidescroll
 
 	
-	//set onzichtbaar blokken on the X of normal blocks.
+	//zet de onzichtbare blokken op de bovenkant van de gewone blokken. Zodat je als je op de onzichtbare blokken komt je over de gewone blokkenn heen kan.
 	onzichtbaar_blok1.setX(block1.getX());
 	onzichtbaar_blok1.setY(block1.getY());
 	onzichtbaar_blok2.setX(block2.getX());
@@ -310,46 +330,47 @@ function update_level() {
 	onzichtbaar_blok3.setX(block3.getX());
 	onzichtbaar_blok3.setY(block3.getY());
 
-	//collision between all blocks. Will set blocks random again.
+	//collision met alle blokken. Dan zet hij alle blokken weer op een random locatie.
 	if(collision(block1, block2)) {
-		block1.setX(Math.floor((Math.random() * 1000) + 950));
+		block1.setX(Math.floor((Math.random() * 50) + 950));
 		block1.setY(445)
 	}
 	if(collision(block1, block3)) {
-		block2.setX(Math.floor((Math.random() * 1400) + 1100));
-		block2.setY(445);
+		block1.setX(Math.floor((Math.random() * 300) + 1100));
+		block1.setY(445);
 	}
 	if(collision(block2, block3)) {
-		block3.setX(Math.floor((Math.random() * 1600) + 1400));
-		block3.setY(Math.floor((Math.random() * 100) + 0));
+		block3.setX(Math.floor((Math.random() * 200) + 1400));
+		block3.setY(Math.floor((Math.random() * 50) + 300));
 	}
-	//if blocks getX -200 they will reset.
+	//als de blokken getX -200 is. Worden ze op een andere random locatie gezet.
 	if(block1.getX() <= -200) {
-		block1.setX(Math.floor((Math.random() * 1000) + 950));
+		block1.setX(Math.floor((Math.random() * 50) + 950));
 		block1.setY(445);
 		if(currentGameState == GAME_STATE_LEVEL) {
 		gameObjectsLayer.add(block1);
-	}
-			if(block2.getX() >= block1.getX() +40) {
-				block2.setX(block1.getX()+Math.floor((Math.random() * 100) + 50));
-			}
+		}
+		if(block2.getX() >= block1.getX() +40) {
+			block2.setX(block1.getX()+Math.floor((Math.random() * 50) + 1000));
+		}
 	}
 	if(block2.getX() <= -200) {
-		block2.setX(Math.floor((Math.random() * 1400) + 1100));
+		block2.setX(Math.floor((Math.random() * 300) + 1100));
 		block2.setY(445);
 		if(currentGameState == GAME_STATE_LEVEL) {
 		gameObjectsLayer.add(block2);
-	}
-			if(block1.getX() >= block2.getX() +40) {
-				block1.setX(block2.getX()+Math.floor((Math.random() * 100) + 50));
-			}
+		}
+		if(block1.getX() >= block2.getX() +40) {
+			block1.setX(block2.getX()+Math.floor((Math.random() * 50) + 1000));
+		}
 	}
 	if(block3.getX() <= -200) {
+		block3.setX(Math.floor((Math.random() * 200) + 1400));
+		block3.setY(Math.floor((Math.random() * 50) + 300));
 		if(currentGameState == GAME_STATE_LEVEL) {
 		gameObjectsLayer.add(block3);
-	}
-		block3.setX(Math.floor((Math.random() * 1600) + 1400));
-		block3.setY(Math.floor((Math.random() * 350) + 300));
+		}
+		
 	}
 
 	//backgrounds
@@ -357,30 +378,29 @@ function update_level() {
 	background1.setX(background1.getX()-levelSnelheid); //background 1 sidescroll
 	background2.setX(background2.getX()-levelSnelheid); //background 2 sidescroll
 
-	if(background1.getX() <= -1000) {					//background 1 set to 1000
+	if(background1.getX() <= -1000) {					//background 1 naar setX 1000
 		background1.setX(background2.getX()+1000);
 	}
-	if(background2.getX() <= -1000) {					//background 2 set to 1000
+	if(background2.getX() <= -1000) {					//background 2 naar setX 1000
 		background2.setX(background1.getX()+1000);
 	}
 	
-	//collisions with hero and other gameobjects
-
-	//if(collision(hero,spikes)){							//collison between hero and spikes
-	
-	//}
-	if (collision(block1, hero)) {						//collison between block 1 and hero
+	//collisions met hero en blokken
+	if (collision(block1, hero)) {						//collison met block 1 en hero
 		hero.setX(hero.getX()-levelSnelheid);
 	}
-	if (collision(block2, hero)) {						//collison between block 2 and hero
+	if (collision(block2, hero)) {						//collison met block 2 en hero
+		hero.setX(hero.getX()-levelSnelheid);
+	}
+	if (collision(block3, hero)) {						//collison met block 2 en hero
 		hero.setX(hero.getX()-levelSnelheid);
 	}
 	
-	//jump and gravity sysmtem
+	//jump en gravity sysmtem
 
-	if(keyPressList[32] && canJump == true && jumpTimer <= 0 && JTimer <= 0) {			//if this is all true you can jump
+	if(keyPressList[32] && canJump == true && jumpTimer <= 0 && JTimer <= 0) {			//als dit allemaal waar is kan je springen.
 		canJump = false;
-		jumpTimer = 10;
+		jumpTimer = 11;
 		keyPressList[32] = false;
 	}	
 	if(jumpTimer <= 0){  																//jumptimer canjump true
@@ -389,13 +409,13 @@ function update_level() {
 	else {																				
 		jumpTimer -= 1;
 	}
-	if(canJump == false) {																//move up if you jump
+	if(canJump == false) {																//ga naar boven als je springt.
 		hero.setY(hero.getY() -jumpSpeed);
 	}
-	else if(hero.getY() < collisionBorder) {											//move down if you jump
+	else if(hero.getY() < collisionBorder) {											//ga naar beneden als je in de lucht bent.
 		JTimer += 1;
 		hero.setY(hero.getY() + gravity);
-	}
+	 }
 	else {
 		JTimer = 0;
 	}

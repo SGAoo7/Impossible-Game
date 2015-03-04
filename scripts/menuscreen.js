@@ -1,3 +1,4 @@
+//dit is eigenlijk een functie van een menuscherm die ik niet heb gebruikt.
 var startButton;
 
 function menuScreen(){

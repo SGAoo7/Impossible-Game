@@ -1,2 +1,0 @@
-# Impossible-Game
-School project.

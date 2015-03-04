@@ -1,3 +1,4 @@
+//deze twee lijnen zijn in de shop gezet. Gewoon voor de opmaak. Maak ik wilde laten zien hiermee dat ik ook lijnen kan maken.
 var line2 = new Kinetic.Line({
  			x: 100,
   			y: 100,
@@ -10,46 +11,59 @@ var line = new Kinetic.Line({
   			points: [-60, 0, 150, 0],
   			stroke: '#E6E6E6'
 });
+
+//deze variables zijn voor als je een bepaalde button selecteert als je naar rechts beweegt met de pijltjestoetsen. 
 var jumpTrigger = false;
 var bulletTrigger = true;
 var coinTrigger = false;
 
+//deze variables zijn voor als je een bepaalde button selecteert als je naar links beweegt met de pijltjestoetsen. 
 var jumpBackTrigger = false;
 var bulletBackTrigger = true;
 var coinBackTrigger = false;
 
+//deze variables detecteren of je iets koopt en je ability pre-activeren.
 var jumpBuy = false;
-var jumpExtraBuy = false;
-var bulletBuy = false;
-var bulletExtraBuy = false;
 var coinsBuy = false;
+var bulletBuy = false;
+
+//deze variables detecteren of je iets koopt.
+var bulletExtraBuy = false;
+var jumpExtraBuy = false;
 var coinsExtraBuy = false;
 
+//deze variables detecteren wanneer je je ability aanzet. Daarna gaat er een timer lopen.
 var useJumpAbility = false;
 var useCoinAbility = false;
 var useBulletAbility = false;
 
+//variable die detecteert hoeveel geld je hebt.
 var coins = 0;
+
+//variables die displayen hoeveel ability je bijvoorbeeld van jump hebt gekocht.
+var bullet = 1;
+var jump = 2;
+var faster = 1;
+
+//variables die alles laten zien op het scherm.
 var showCoins = new Kinetic.Text({x: 150,y: 120,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
-var bullet = 0;
 var showBullets = new Kinetic.Text({x: 150,y: 250,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
-var jump = 0;
 var showJumps = new Kinetic.Text({x: 150,y: 290,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
-var faster = 0;
 var showFaster = new Kinetic.Text({x: 150,y: 330,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
 
-var shop_buySound = new Audio('assets/shop_buySound.mp3');
-var shop_backgroundSound = new Audio('assets/shop_backgroundSound.mp3');
+//geluid
+var shop_buySound = new Audio('assets/audio/shop_buySound.mp3');
+var shop_backgroundSound = new Audio('assets/audio/shop_backgroundSound.mp3');
 
+//variable die zorgt dat je alleen in het shop level abilities kan kopen.
 var kopenTrue = false;
-
-// all the variables.
 
 function start_shop(){
 	// alle plaatjes in het level plaatsen, beginposities.
 	
 	gameObjectsLayer.removeChildren();
 
+	//alle images die worden toegevoegd in de shop.
 	gameObjectsLayer.add(end_background2);
 	gameObjectsLayer.add(end_background);
 	gameObjectsLayer.add(shop_background);
@@ -74,7 +88,9 @@ function start_shop(){
 	gameObjectsLayer.add(showBullets);
 	gameObjectsLayer.add(showJumps);
 	gameObjectsLayer.add(showFaster);
+	
 	kopenTrue = true;
+	
 	shop_backgroundSound.play();
 	gameObjectsLayer.draw();
 
@@ -94,7 +110,7 @@ function level_shop() {
 
 function update_shop() {
 
-	//set all text and scale all images
+	//scale alle images en voeg tekst toe.
 	showCoins.setText(coins);	
 	showBullets.setText(bullet);	
 	showJumps.setText(jump);	
@@ -174,7 +190,7 @@ function update_shop() {
 		bulletExtraBuy = true
 		jumpExtraBuy = false;
 	}
-	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true && kopenTrue == true) {		//buy jump
+	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true && kopenTrue == true) {		//koop jump
 		coins -= 10;
 		shop_buySound.play();
 		jump += 1;
@@ -183,7 +199,7 @@ function update_shop() {
 		 	coins = 0;
 		 }
 	}
-	if(keyPressList[13] && bulletBuy == true && bulletExtraBuy == true && kopenTrue == true) {	//buy bullet
+	if(keyPressList[13] && bulletBuy == true && bulletExtraBuy == true && kopenTrue == true) {	//koop bullet
 		coins -= 12;
 		bullet += 1;
 		shop_buySound.play();
@@ -192,7 +208,7 @@ function update_shop() {
 		 	coins = 0;
 		 }
 	}	
-	if(keyPressList[13] && coinsBuy == true && coinsExtraBuy == true && kopenTrue == true) {	//buy faster coins
+	if(keyPressList[13] && coinsBuy == true && coinsExtraBuy == true && kopenTrue == true) {	//koop faster coins
 		coins -= 11;
 		faster += 1;
 		shop_buySound.play();
@@ -201,21 +217,21 @@ function update_shop() {
 		 	coins = 0;
 		 }
 	}
-	//can you buy jump ability?
+	//kan je jump ability kopen?
 	if(coins >= 10) {
 		jumpBuy = true;
 	}
 	else {
 		jumpBuy = false;
 	}
-	//can you buy bullet ability?
+	//kan je bullet ability kopen?
 	if(coins>= 12) {
 		bulletBuy = true;
 	}
 	else {
 		bulletBuy = false;
 	}
-	//can you buy faster coins ability?
+	//kan je faster coins abillity kopen?
 	if(coins>= 11) {
 		coinsBuy = true;
 	}

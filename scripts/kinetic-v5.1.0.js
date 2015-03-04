@@ -1,4 +1,4 @@
-
+//dit is de file waar eigenlijk alle functie worden gemaakt. Zodat wij die in de game kunnen gebruiken.
 /*
  * KineticJS JavaScript Framework v5.1.0
  * http://www.kineticjs.com/

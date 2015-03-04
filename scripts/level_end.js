@@ -1,37 +1,35 @@
-//var that shows your end time.
+//var dat je eindtijd showt hoeveel je hebt gehaald.
 var showEndTime = new Kinetic.Text({x: 320,y: 160,text:'', fontSize: 25,fontFamily: 'Calibri', fill: 'black', });
 
-//vars for activating and entering for example the try again button.
+//vars voor het activeren van de buttons als je door gaat naar het volgende script.
 var enterTry = false;
 var enterMenu = false;
 var enterShop = false;
 var enterQuit = false;
 
-//vars for activating for example the try again button if you go back.
+//vars voor het activeren van de buttons als je omlaag gaat met de pijltjestoetsen.
 var menuTrigger = false;
 var TryTrigger = true;
 var shopTrigger = false;
 var quitTrigger = false;
 
-//vars for activating for example the try again button
+//vars voor het activeren van de buttons als je omhoog gaat met de pijltjestoetsen.
 var menuBackTrigger = false;
 var shopBackTrigger = false;
 var quitBackTrigger = true;
 
-var herhalenLevel = false;
-var herhalenMenu = false;
-var theShop = false;
+//game over geluid
+var gameOverSound = new Audio('assets/audio/GameOverSound.mp3');
 
-var gameOverSound = new Audio('assets/GameOverSound.mp3');
+//var die zorgt dat je als je doodgaat het game over geluid hoort en niet als je terugkomt van de shop.
 var playGameOverSound = false;
-
-// all the variables.
 
 function start_end(){
 	// alle plaatjes in het level plaatsen, beginposities.
 	
 	gameObjectsLayer.removeChildren();
 
+	//alle images adden.
 	gameObjectsLayer.add(end_background2);
 	gameObjectsLayer.add(end_background);
 	gameObjectsLayer.add(showEndTime);
@@ -42,10 +40,11 @@ function start_end(){
 	gameObjectsLayer.add(try_again2);
 	gameObjectsLayer.add(shop2);
 	gameObjectsLayer.add(quit_game2);
-	gameOverSound.play();
 
+	//laat alleen gameoversound spelen als je net dood gegaan bent. Niet als je terugkomt uit de shop.
 	if(playGameOverSound == true) {
 			gameOverSound.play();
+			playGameOverSound = false;
 	}
 
 	gameObjectsLayer.draw();
@@ -66,12 +65,29 @@ function level_end() {
 
 function update_end() {
 	
-	
-	if(currentGameState==GAME_STATE_END) {
-		kopenTrue = false;
-		console.log(playGameOverSound);
 
-	//scale all images
+	if(currentGameState==GAME_STATE_END) {								//als deze gamestate geactiveerd is speel de rest van de code af.
+		kopenTrue = false;
+
+	if(useCoinAbility == true) {
+		useCoinAbility = false;
+		useAbilityTimerCoin = 30;
+		faster -= 1;
+		coinTime += 0.02;
+	}
+	if(useJumpAbility == true) {
+		useJumpAbility = false;
+		useAbilityTimerJump = 30;
+		jump -= 1;
+		jumpSpeed = 10;
+	}
+	if(useBulletAbility == true) {
+		useAbilityTimerBullet = 30;
+		useBulletAbility = false;
+		bullet --;
+	}
+
+	//scale alle images
 	end_background.scale({x: 0.5, y: 0.45});
 	GameOver.scale({x: 1.5, y: 1.5});
 	end_menu.scale({x: 0.6, y: 0.6});
@@ -227,8 +243,12 @@ function update_end() {
 	if(keyPressList[13] && enterTry == true) {							//press try again button
 		switchGameState(GAME_STATE_INIT_LEVEL);
 		pause = false;
-		heroLife = 1;
 		time = 0;
+		heroLife = 1;
+		useAbilityTimerCoin = 30;
+		useAbilityTimerBullet = 30;
+		useAbilityTimerJump = 30;
+		gameOverSound.currentTime = 0;
 		gameOverSound.pause();
 		shop_buySound.pause();
 	}
@@ -240,13 +260,14 @@ function update_end() {
 	if(keyPressList[13] && enterShop == true) {							//press shop button
 		switchGameState(GAME_STATE_INIT_LEVEL_SHOP);
 		gameOverSound.pause();
+		playGameOverSound = false;
 		//gameOverSound.currentTime = 20;
 		shop_buySound.pause();
 	}
 	if(keyPressList[13] && enterQuit == true) {							//press quit button
 		window.close();
 	}
-	showEndTime.setText('You survived '+ parseInt(time) + ' seconds');	//display how many times you survived
+	showEndTime.setText('You survived '+ parseInt(time) + ' seconds');	//laat zien hoelang je het overleeft hebt in de game.
 }
 }
 	
