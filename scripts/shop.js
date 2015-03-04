@@ -41,6 +41,8 @@ var showFaster = new Kinetic.Text({x: 150,y: 330,text:'', fontSize: 24,fontFamil
 var shop_buySound = new Audio('assets/shop_buySound.mp3');
 var shop_backgroundSound = new Audio('assets/shop_backgroundSound.mp3');
 
+var kopenTrue = false;
+
 // all the variables.
 
 function start_shop(){
@@ -72,7 +74,7 @@ function start_shop(){
 	gameObjectsLayer.add(showBullets);
 	gameObjectsLayer.add(showJumps);
 	gameObjectsLayer.add(showFaster);
-	
+	kopenTrue = true;
 	shop_backgroundSound.play();
 	gameObjectsLayer.draw();
 
@@ -103,6 +105,13 @@ function update_shop() {
 	if(keyPressList[27]) {										//esc button
 		shop_backgroundSound.pause();
 		switchGameState(GAME_STATE_INIT_LEVEL_END);
+		shop_buySound.pause();
+		menu_backgroundSound.pause();
+		gameOverSound.currentTime = 8;	
+		shop_backgroundSound.currentTime = 0;
+		kopenTrue = false;
+		playGameOverSound = false;
+		shop_buySound.currentTime = 0;	
 	}
 	if(keyPressList[39] && bulletTrigger == true) {				//bullet buy active
 		shop_bullets.opacity(1);
@@ -165,7 +174,7 @@ function update_shop() {
 		bulletExtraBuy = true
 		jumpExtraBuy = false;
 	}
-	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true) {			//buy jump
+	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true && kopenTrue == true) {		//buy jump
 		coins -= 10;
 		shop_buySound.play();
 		jump += 1;
@@ -174,7 +183,7 @@ function update_shop() {
 		 	coins = 0;
 		 }
 	}
-	if(keyPressList[13] && bulletBuy == true && bulletExtraBuy == true) {		//buy bullet
+	if(keyPressList[13] && bulletBuy == true && bulletExtraBuy == true && kopenTrue == true) {	//buy bullet
 		coins -= 12;
 		bullet += 1;
 		shop_buySound.play();
@@ -183,7 +192,7 @@ function update_shop() {
 		 	coins = 0;
 		 }
 	}	
-	if(keyPressList[13] && coinsBuy == true && coinsExtraBuy == true) {			//buy faster coins
+	if(keyPressList[13] && coinsBuy == true && coinsExtraBuy == true && kopenTrue == true) {	//buy faster coins
 		coins -= 11;
 		faster += 1;
 		shop_buySound.play();

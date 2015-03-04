@@ -10,27 +10,36 @@ var jumpSpeed = 10;
 var JTimer = 0;
 var jumpTimer = 0;
 var gravity = 10;
-
 var collisionBorder = 495;
 
-var heroInAir = false;
-
+//start var if you press space it's true.
 var pause = false;
 
+//ability timer that counts down from 30 to 0.
 var useAbilityTimer = 30;
 
+
+//vars so that you can shoot.
 var bulletTimer = 30;
 var bulletShoot = false;
 
+//real timer
 var time = 0;
+//cointimer that's is the same as realtimer only difference is that it gives you money.
 var coinTime = 0;
+
+//tutorial vars in the beginning of the game.
 var showTime = new Kinetic.Text({x: 10,y: 10,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var shopShow = new Kinetic.Text({x: 650,y: 10,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var koopShow = new Kinetic.Text({x: 540,y: 40,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
+//text vars to show ability tutorial.
 var bulletAbilityShow = new Kinetic.Text({x: 400,y: 470,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var jumpAbilityShow = new Kinetic.Text({x: 400,y: 440,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
 var coinAbilityShow = new Kinetic.Text({x: 400,y: 410,text:'', fontSize: 20,fontFamily: 'Calibri', fill: 'black', });
+//bullet array
 var bullets = [];
+//var that controls the time in the level.
+var levelSpeed = false;
 
 var level_backgroundSound = new Audio('assets/level_background.mp3');
 
@@ -67,10 +76,17 @@ function start_level(){
 	gameObjectsLayer.add(koopShow);
 	
 	
-
+	//reset all gameobject if you switch back to this level.
 	hero.offsetY(50);
 	hero.setY(495);
 	hero.setX(100);
+	background1.setX(0);
+	background2.setX(1000);
+	spikes.setX(900);
+	block1.setX(1200);
+	block2.setX(1400);
+	block3.setX(1600);
+
 
 	
 	gameObjectsLayer.draw();
@@ -81,7 +97,11 @@ function start_level(){
 
 
 function level_level() {
+	//this will not make your game speed up if you swith back to this level.
+	if(levelSpeed == false) {
 	gameLoop=setInterval(update_level,20);  
+	levelSpeed = true;
+}
 	//update();
 	//20 is de 'wachttijd in milliseconden, de functie 'update' wordt om de 0.02 s aangeroepen.
 	// Dit voorbeeld is dus 50 fps (mits de hardware het aankan)
@@ -90,22 +110,28 @@ function level_level() {
 
 function update_level() {
 
+	//volume of background music
 	level_backgroundSound.volume = 0.2;
 
+	//set all text
 	shopShow.setText('*You can buy things in the shop*');
 	koopShow.setText('*For every 30 seconds you live you get 1 coin*');
 	bulletAbilityShow.setText('When you play the game, press "q" and then enter to shoot.');
 	jumpAbilityShow.setText('When you play the game, press "w" and you will jump higher.');
 	coinAbilityShow.setText('When you play the game, press "e" and you will get more money.');
+	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 
-	//hero.setX(hero.getX() -1);
+	//if statement when you die
 	if(currentGameState == GAME_STATE_LEVEL) {
 		if(hero.getX() <= 0) {
 			heroLife = 0;
 			level_backgroundSound.pause();
+			playGameOverSound = true;
+			level_backgroundSound.currentTime = 0;	
 			switchGameState(GAME_STATE_INIT_LEVEL_END);
 		}
 	}
+	//if you buyed an ability tutorial will show
 	if(bullet >= 1 && pause == false) {
 		gameObjectsLayer.add(bulletAbilityShow);
 	}  
@@ -115,6 +141,7 @@ function update_level() {
 	if(faster >= 1 && pause == false) {
 		gameObjectsLayer.add(coinAbilityShow);
 	}
+ 	//start if you press space
  	if(pause == false) {
 		levelSnelheid = 0;
 		  
@@ -129,12 +156,14 @@ function update_level() {
 			koopShow.remove();
 		}
 	}
+	//timer and level play
 	if(pause == true && heroLife == 1) {
 		levelSnelheid = 3;
 		level_backgroundSound.play();
 		time += 0.02;
 		coinTime += 1;
 		gameObjectsLayer.add(showTime);
+			//use coin ability for 30 seconds
 			if(useCoinAbility == true) {
 				useAbilityTimer -= 1.02;
 				coins += 1;
@@ -145,6 +174,7 @@ function update_level() {
 						useAbilityTimer = 30;
 					}
 			}
+			//use jump ability for 30 seconds
 			if(useJumpAbility == true) {
 				useAbilityTimer -= 0.02;
 				jumpSpeed = 20
@@ -155,6 +185,7 @@ function update_level() {
 						useAbilityTimer = 30;
 					}
 			}
+			//use bullet ability for 30 seconds and make bullets.
 			if(useBulletAbility == true) {
 				useAbilityTimer -= 0.02;
 				if(keyPressList[13] && bulletShoot == true) {
@@ -260,7 +291,6 @@ function update_level() {
 		JTimer = 0;
 	}
 
-	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 	//hero
 
 	spikes.setX(spikes.getX()-levelSnelheid);			//spikes sidescroll
@@ -280,6 +310,7 @@ function update_level() {
 	onzichtbaar_blok3.setX(block3.getX());
 	onzichtbaar_blok3.setY(block3.getY());
 
+	//collision between all blocks. Will set blocks random again.
 	if(collision(block1, block2)) {
 		block1.setX(Math.floor((Math.random() * 1000) + 950));
 		block1.setY(445)
@@ -292,6 +323,7 @@ function update_level() {
 		block3.setX(Math.floor((Math.random() * 1600) + 1400));
 		block3.setY(Math.floor((Math.random() * 100) + 0));
 	}
+	//if blocks getX -200 they will reset.
 	if(block1.getX() <= -200) {
 		block1.setX(Math.floor((Math.random() * 1000) + 950));
 		block1.setY(445);
@@ -332,7 +364,7 @@ function update_level() {
 		background2.setX(background1.getX()+1000);
 	}
 	
-	//collisions
+	//collisions with hero and other gameobjects
 
 	//if(collision(hero,spikes)){							//collison between hero and spikes
 	

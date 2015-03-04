@@ -1,15 +1,19 @@
+//var that shows your end time.
 var showEndTime = new Kinetic.Text({x: 320,y: 160,text:'', fontSize: 25,fontFamily: 'Calibri', fill: 'black', });
 
+//vars for activating and entering for example the try again button.
 var enterTry = false;
 var enterMenu = false;
 var enterShop = false;
 var enterQuit = false;
 
+//vars for activating for example the try again button if you go back.
 var menuTrigger = false;
 var TryTrigger = true;
 var shopTrigger = false;
 var quitTrigger = false;
 
+//vars for activating for example the try again button
 var menuBackTrigger = false;
 var shopBackTrigger = false;
 var quitBackTrigger = true;
@@ -19,6 +23,7 @@ var herhalenMenu = false;
 var theShop = false;
 
 var gameOverSound = new Audio('assets/GameOverSound.mp3');
+var playGameOverSound = false;
 
 // all the variables.
 
@@ -38,6 +43,10 @@ function start_end(){
 	gameObjectsLayer.add(shop2);
 	gameObjectsLayer.add(quit_game2);
 	gameOverSound.play();
+
+	if(playGameOverSound == true) {
+			gameOverSound.play();
+	}
 
 	gameObjectsLayer.draw();
 	
@@ -59,6 +68,8 @@ function update_end() {
 	
 	
 	if(currentGameState==GAME_STATE_END) {
+		kopenTrue = false;
+		console.log(playGameOverSound);
 
 	//scale all images
 	end_background.scale({x: 0.5, y: 0.45});
@@ -215,15 +226,22 @@ function update_end() {
 	}
 	if(keyPressList[13] && enterTry == true) {							//press try again button
 		switchGameState(GAME_STATE_INIT_LEVEL);
+		pause = false;
+		heroLife = 1;
+		time = 0;
 		gameOverSound.pause();
+		shop_buySound.pause();
 	}
 	if(keyPressList[13] && enterMenu == true) {							//press menu button
 		switchGameState(GAME_STATE_INIT_LEVEL_MENU);
 		gameOverSound.pause();
+		shop_buySound.pause();
 	}
 	if(keyPressList[13] && enterShop == true) {							//press shop button
 		switchGameState(GAME_STATE_INIT_LEVEL_SHOP);
 		gameOverSound.pause();
+		//gameOverSound.currentTime = 20;
+		shop_buySound.pause();
 	}
 	if(keyPressList[13] && enterQuit == true) {							//press quit button
 		window.close();

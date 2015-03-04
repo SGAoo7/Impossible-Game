@@ -65,6 +65,11 @@ function update_menu(){
 		quitTrue = false;
 	}	
 	if(keyPressList[13] && startTrue == true) {				//start button pressed
+		menu_backgroundSound.currentTime = 0;	
+		menu_backgroundSound.pause();
+		heroLife = 1;
+		pause = false;
+		time = 0;
 		switchGameState(GAME_STATE_INIT_LEVEL);
 		startTrue = false;
 		menu_backgroundSound.pause();
