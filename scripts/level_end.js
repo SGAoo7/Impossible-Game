@@ -23,6 +23,11 @@ var gameOverSound = new Audio('assets/audio/GameOverSound.mp3');
 
 //var die zorgt dat je als je doodgaat het game over geluid hoort en niet als je terugkomt van de shop.
 var playGameOverSound = false;
+var highscore = 0;
+
+//laat de highscore zien.
+var showhighscore = new Kinetic.Text({x: 335,y: 200,text:'', fontSize: 25,fontFamily: 'Calibri', fill: 'black', });
+
 
 function start_end(){
 	// alle plaatjes in het level plaatsen, beginposities.
@@ -33,6 +38,7 @@ function start_end(){
 	gameObjectsLayer.add(end_background2);
 	gameObjectsLayer.add(end_background);
 	gameObjectsLayer.add(showEndTime);
+	gameObjectsLayer.add(showhighscore);
 	gameObjectsLayer.add(GameOver);
 	gameObjectsLayer.add(menu_arrow);
 	gameObjectsLayer.add(menu_space);
@@ -69,6 +75,7 @@ function update_end() {
 	if(currentGameState==GAME_STATE_END) {								//als deze gamestate geactiveerd is speel de rest van de code af.
 		kopenTrue = false;
 
+	//dit is zodat je als je een ability hebt aanstaan en als je doodgaat dat je hem niet opnieuw kan gebruiken.
 	if(useCoinAbility == true) {
 		useCoinAbility = false;
 		useAbilityTimerCoin = 30;
@@ -99,6 +106,9 @@ function update_end() {
 	quit_game.scale({x: 0.6, y: 0.6});
 	quit_game2.scale({x: 0.6, y: 0.6});
 
+	//dit systeem zorgt er voor dat je de knoppen kan selecteren. Als je naar boven gaat en naar onder met de pijltjetoetsen.
+	//in princiepe werkt het zo. Als je naar boven gaat met pijltjes dan komt er een nieuwe image en de andere gaat weg.
+	//zo weet je of je iets geselecteerd hebt.
 	if(keyPressList[38] && TryTrigger == true) {						//try again button.			
 		try_again2.remove();
 		gameObjectsLayer.add(try_again);
@@ -240,11 +250,13 @@ function update_end() {
 		keyPressList[38] = false;
 		selectSound.play();
 	}
+	console.log(kopenTrue);
 	if(keyPressList[13] && enterTry == true) {							//press try again button
 		switchGameState(GAME_STATE_INIT_LEVEL);
 		pause = false;
 		time = 0;
 		heroLife = 1;
+		kopenTrue = false;
 		useAbilityTimerCoin = 30;
 		useAbilityTimerBullet = 30;
 		useAbilityTimerJump = 30;
@@ -256,6 +268,7 @@ function update_end() {
 		switchGameState(GAME_STATE_INIT_LEVEL_MENU);
 		gameOverSound.pause();
 		shop_buySound.pause();
+		kopenTrue = false;
 	}
 	if(keyPressList[13] && enterShop == true) {							//press shop button
 		switchGameState(GAME_STATE_INIT_LEVEL_SHOP);
@@ -268,6 +281,12 @@ function update_end() {
 		window.close();
 	}
 	showEndTime.setText('You survived '+ parseInt(time) + ' seconds');	//laat zien hoelang je het overleeft hebt in de game.
+	showhighscore.setText('Your highscore is '+ parseInt(highscore));	//laat zien wat je highscore is.
+	
+	//highscore systeem. Als je een hogere score dan normaal hebt gaat je highscore omhoog.
+	if(highscore < time) {
+		highscore = time;
+	}
 }
 }
 	

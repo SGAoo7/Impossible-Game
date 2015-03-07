@@ -46,6 +46,9 @@ function update_menu(){
 
 	background_menu.scale({x:0.5, y:0.5});
 	
+	//dit systeem zorgt er voor dat je de knoppen kan selecteren. Als je naar boven gaat en naar onder met de pijltjetoetsen.
+	//in princiepe werkt het zo. Als je naar boven gaat met pijltjes dan komt er een nieuwe image en de andere gaat weg.
+	//zo weet je of je iets geselecteerd hebt.
 	if(keyPressList[40]) {									//menu quit button
 		gameObjectsLayer.add(menu_quit_2);
 		menu_start_2.remove();

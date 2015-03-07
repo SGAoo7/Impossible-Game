@@ -121,7 +121,7 @@ function update_level() {
 	coinAbilityShow.setText('When you play the game, press "e" and you will get more money.');
 	showTime.setText('You lived '+ parseInt(time) + ' seconds');
 
-	//if statement als je doodgaat.
+	//if statement als je doodgaat. je gaat dood als je tegen de x=0 komt.
 	if(currentGameState == GAME_STATE_LEVEL) {
 		if(hero.getX() <= 0) {
 			heroLife = 0;
@@ -156,6 +156,10 @@ function update_level() {
 			koopShow.remove();
 		}
 	}
+	//dit grote systeem hieronder geeft eigenglijk aan dat je als je je ability geactiveerd hebt, 
+	//dat er dan een timer gaat aflopen die zorgt hoelang je de ability kan gebruiken.
+	// Als je dood gaat kan je je abilty ook niet meer gebruiken alleen dat staat in een ander script.
+	//daarna wordt wat de ability ook is geactiveerd en wordt natuurlijk ook op een moment gedeactiveerd. 
 	//timer en level play
 	if(pause == true && heroLife == 1) {
 		levelSnelheid = 6;
@@ -344,6 +348,8 @@ function update_level() {
 		block3.setY(Math.floor((Math.random() * 50) + 300));
 	}
 	//als de blokken getX -200 is. Worden ze op een andere random locatie gezet.
+	//als ze in elkaar of dicht bij elkaar zijn worden ze gereset.
+	//block 1 en 2 zijn altijd op de grond en blok 3 zweeft altijd in de lucht.
 	if(block1.getX() <= -200) {
 		block1.setX(Math.floor((Math.random() * 50) + 950));
 		block1.setY(445);
@@ -364,11 +370,19 @@ function update_level() {
 			block1.setX(block2.getX()+Math.floor((Math.random() * 50) + 1000));
 		}
 	}
+	//bij block 3 wordt alleen de y ass gereset als hij collision heeft met block 1 en 2.
+	//dit is omdat block 3 alleen in de lucht zweeft.
 	if(block3.getX() <= -200) {
 		block3.setX(Math.floor((Math.random() * 200) + 1400));
 		block3.setY(Math.floor((Math.random() * 50) + 300));
 		if(currentGameState == GAME_STATE_LEVEL) {
 		gameObjectsLayer.add(block3);
+		}
+		if(block3.getY() >= block2.getY() +20) {
+			block3.setY(block2.getY()+Math.floor((Math.random() * 50) + 300));
+		}
+		if(block3.getY() >= block1.getY() +20) {
+			block3.setY(block1.getY()+Math.floor((Math.random() * 50) + 300));
 		}
 		
 	}
@@ -400,7 +414,7 @@ function update_level() {
 
 	if(keyPressList[32] && canJump == true && jumpTimer <= 0 && JTimer <= 0) {			//als dit allemaal waar is kan je springen.
 		canJump = false;
-		jumpTimer = 11;
+		jumpTimer = 14;
 		keyPressList[32] = false;
 	}	
 	if(jumpTimer <= 0){  																//jumptimer canjump true
@@ -421,6 +435,3 @@ function update_level() {
 	}
 	gameObjectsLayer.draw();
 }
-	
-
-	  

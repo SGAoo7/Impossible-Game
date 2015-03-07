@@ -41,9 +41,9 @@ var useBulletAbility = false;
 var coins = 0;
 
 //variables die displayen hoeveel ability je bijvoorbeeld van jump hebt gekocht.
-var bullet = 1;
-var jump = 2;
-var faster = 1;
+var bullet = 0;
+var jump = 0;
+var faster = 0;
 
 //variables die alles laten zien op het scherm.
 var showCoins = new Kinetic.Text({x: 150,y: 120,text:'', fontSize: 24,fontFamily: 'Calibri', fill: 'white', });
@@ -88,8 +88,12 @@ function start_shop(){
 	gameObjectsLayer.add(showBullets);
 	gameObjectsLayer.add(showJumps);
 	gameObjectsLayer.add(showFaster);
-	
-	kopenTrue = true;
+
+	//zet opacity op 0.6 want dan kan je niet iets kopen als je de vorige keer toen je
+	//in de shop kwam iets had geselecteerd.
+	shop_coin.opacity(0.6);
+	shop_jump.opacity(0.6);
+	shop_bullets.opacity(0.6);
 	
 	shop_backgroundSound.play();
 	gameObjectsLayer.draw();
@@ -118,6 +122,9 @@ function update_shop() {
 	end_background.scale({x: 0.5, y: 0.45});
 	shop_background.scale({x: 1.51, y: 1.28});
 	
+	//dit systeem zorgt er voor dat je de knoppen kan selecteren. Als je naar boven gaat en naar onder met de pijltjetoetsen.
+	//in princiepe werkt het zo. Als je naar boven gaat met pijltjes dan komt er een nieuwe image en de andere gaat weg.
+	//zo weet je of je iets geselecteerd hebt.
 	if(keyPressList[27]) {										//esc button
 		shop_backgroundSound.pause();
 		switchGameState(GAME_STATE_INIT_LEVEL_END);
@@ -136,6 +143,7 @@ function update_shop() {
 		bulletTrigger = false;
 		keyPressList[39] = false;
 		jumpTrigger = true;
+		kopenTrue = true;
 		bulletExtraBuy = true;
 		jumpExtraBuy = false;
 	}	
@@ -148,6 +156,7 @@ function update_shop() {
 		jumpTrigger = false;
 		coinTrigger = true;
 		jumpExtraBuy = true;
+		kopenTrue = true;
 		bulletExtraBuy = false;
 		coinsExtraBuy = false;
 		shop_bullets.opacity(0.6);
@@ -162,6 +171,7 @@ function update_shop() {
 		keyPressList[39] = false;
 		jumpBackTrigger = true;
 		jumpExtraBuy = false;
+		kopenTrue = true;
 		coinsExtraBuy = true;
 		jumpBuy = false;
 	}
@@ -175,6 +185,7 @@ function update_shop() {
 		cost_coin.opacity(0.6);
 		cost_jump.opacity(1);
 		bulletExtraBuy = false;
+		kopenTrue = true;
 		coinsExtraBuy = false;
 		jumpExtraBuy = true;
 	}
@@ -187,9 +198,12 @@ function update_shop() {
 		cost_jump.opacity(0.6);
 		shop_bullets.opacity(1);
 		cost_bullets.opacity(1);
+		kopenTrue = true;
 		bulletExtraBuy = true
 		jumpExtraBuy = false;
 	}
+	//als je een ability koopt dan gaat het geld van je money af.
+	//en je krijgt jump of welke ability je ook koopt erbij.
 	if(keyPressList[13] && jumpBuy == true && jumpExtraBuy == true && kopenTrue == true) {		//koop jump
 		coins -= 10;
 		shop_buySound.play();
@@ -199,6 +213,7 @@ function update_shop() {
 		 	coins = 0;
 		 }
 	}
+	console.log(kopenTrue);
 	if(keyPressList[13] && bulletBuy == true && bulletExtraBuy == true && kopenTrue == true) {	//koop bullet
 		coins -= 12;
 		bullet += 1;
